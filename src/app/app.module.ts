@@ -8,9 +8,9 @@ import { HomeComponent } from './home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
-  imports: [BrowserModule, AppRoutingModule, MatIconModule],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent, HomeComponent],
+    imports: [BrowserModule, AppRoutingModule, MatIconModule],
+    providers: [],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
