@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     DateAdapter,
     MAT_DATE_FORMATS,
@@ -31,6 +32,9 @@ import { DatePipe } from '@angular/common';
 const modules = [
     MatIconModule,
     MatRippleModule,
+    MatMenuModule,
+    BrowserAnimationsModule,
+    MatCheckboxModule,
     // MatDialogModule,
     // MatInputModule,
     // MatFormFieldModule,
@@ -44,9 +48,8 @@ const modules = [
     // MatSnackBarModule,
     // MatDatepickerModule,
     // MatNativeDateModule,
-    // MatCheckboxModule,
+
     // MatCardModule,
-    // MatMenuModule,
     // MatBottomSheetModule,
 ];
 

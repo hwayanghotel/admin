@@ -1,1 +1,70 @@
-<p>guest-list works!</p>
+<div class="header" *ngIf="!showCheckbox">
+    <mat-icon class="header-prefix" mat-icon matRipple (click)="onBackButton()">keyboard_arrow_left</mat-icon>
+
+    <div class="header-input">
+        <input *ngIf="isSearch" [(ngModel)]="searchInput">
+    </div>
+    <div class="header-suffix">
+        <mat-icon matRipple *ngIf="!isSearch" (click)="isSearch=true">search</mat-icon>
+        <mat-icon matRipple *ngIf="isSearch" (click)="isSearch=false">clear</mat-icon>
+
+        <mat-icon matRipple (click)="addGuest()">add</mat-icon>
+        <mat-icon matRipple [matMenuTriggerFor]="menu">more_vert</mat-icon>
+    </div>
+</div>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item>수정?</button>
+    <button mat-menu-item>취소?</button>
+    <button mat-menu-item>삭제?</button>
+</mat-menu>
+
+<div class="header" *ngIf="showCheckbox">
+    <div class="header-prefix">
+        <mat-checkbox [(ngModel)]="totalChecked" (click)="$event.stopPropagation()"></mat-checkbox>
+        <p>{{totalCheckedNumber}}팀 선택</p>
+        <mat-icon matRipple (click)="showCheckbox=false">clear</mat-icon>
+
+    </div>
+    <div class="header-suffix">
+        <mat-icon matRipple [matMenuTriggerFor]="mailMenu">mail_outline</mat-icon>
+        <mat-icon matRipple (click)="deleteGuests()">delete</mat-icon>
+    </div>
+</div>
+
+<mat-menu #mailMenu="matMenu">
+    <button mat-menu-item>입금요청 문자 전송</button>
+    <button mat-menu-item>예약완료 문자 전송</button>
+    <button mat-menu-item>주차등록 문자 전송</button>
+    <button mat-menu-item>문자 전송</button>
+</mat-menu>
+
+<div class="list">
+    <div class="list-item" *ngFor="let user of db" mat-ripple
+         (click)="showCheckbox? user.checked = !user.checked : showDetailUser(user)"
+         (touchstart)="touchStart(user)" (touchend)="touchEnd()">
+        <div class="checkbox" *ngIf="showCheckbox">
+            <mat-checkbox [(ngModel)]="user.checked" (click)="$event.stopPropagation()"></mat-checkbox>
+        </div>
+        <div class="prefix">
+            <p>{{user.date.format("MM/DD")}}</p>
+            <p>{{type(user)}}</p>
+        </div>
+        <div class="content">
+            <p>{{user.name}} ({{user.person + user.kids}}명)</p>
+        </div>
+        <div class="suffix" matRipple (click)="$event.stopPropagation()" [matMenuTriggerFor]="statusMenu" [matMenuTriggerData]="{user: user}">
+            <p>{{status(user)}}</p>
+        </div>
+    </div>
+</div>
+
+<mat-menu #statusMenu="matMenu">
+    <ng-template matMenuContent let-user="user">
+        <button mat-menu-item *ngIf="user.status !=='bookingComplete'" (click)="setStatus(user, 'bookingComplete')">예약</button>
+        <button mat-menu-item *ngIf="user.status !=='cancel'" (click)="setStatus(user, 'cancel')">취소</button>
+        <button mat-menu-item *ngIf="user.status !=='ready'" (click)="setStatus(user, 'ready')">대기</button>
+        <button mat-menu-item *ngIf="user.status !=='paymentReady'" (click)="setStatus(user, 'paymentReady')">입금전</button>
+    </ng-template>
+
+</mat-menu>
