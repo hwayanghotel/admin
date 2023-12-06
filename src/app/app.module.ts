@@ -5,11 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 
-import { MatIconModule } from '@angular/material/icon';
+import { MaterialModule } from './material.module';
 
 @NgModule({
-    declarations: [AppComponent, HomeComponent],
-    imports: [BrowserModule, AppRoutingModule, MatIconModule],
+    imports: [BrowserModule, AppRoutingModule, MaterialModule],
     providers: [],
     bootstrap: [AppComponent],
 })
