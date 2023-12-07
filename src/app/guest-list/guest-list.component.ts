@@ -88,7 +88,11 @@ export class GuestListComponent implements OnDestroy {
     }
 
     deleteGuests() {
-        console.warn('deleteGuests');
+        this.db
+            .filter((user) => user.checked)
+            .forEach((user) => {
+                this.managerService.delete(user.id);
+            });
     }
 
     showDetailUser(user: Guest) {
@@ -110,8 +114,7 @@ export class GuestListComponent implements OnDestroy {
         user: Guest,
         status: 'ready' | 'paymentReady' | 'bookingComplete' | 'cancel'
     ) {
-        console.warn('setStatus 작업 필요');
-        user.status = status;
+        this.managerService.update({ ...user, status: status });
     }
 
     touchStart(user: Guest) {
@@ -149,8 +152,8 @@ export class GuestListComponent implements OnDestroy {
     private _sortList(a: Guest, b: Guest) {
         // 1) "상태" 순서로 정렬
         const statusOrder = {
-            ready: 0,
-            paymentReady: 1,
+            paymentReady: 0,
+            ready: 1,
             bookingComplete: 2,
             cancel: 2, //3에서 바꿈
         };

@@ -45,7 +45,7 @@ const modules = [
     // MatSelectModule,
     // MatButtonModule,
     // MatSlideToggleModule,
-    // MatSnackBarModule,
+    MatSnackBarModule,
     // MatDatepickerModule,
     // MatNativeDateModule,
 

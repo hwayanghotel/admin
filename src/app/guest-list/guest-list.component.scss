@@ -38,6 +38,10 @@
             padding: 1rem;
         }
 
+        .content {
+            width: 55%;
+        }
+
         .suffix {
             position: absolute;
             text-align: right;
@@ -46,6 +50,11 @@
             padding: 1rem;
         }
     }
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.3;
 }
 
 p {

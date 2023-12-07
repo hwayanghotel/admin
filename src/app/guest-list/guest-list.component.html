@@ -26,7 +26,7 @@
         <mat-icon matRipple (click)="showCheckbox=false">clear</mat-icon>
 
     </div>
-    <div class="header-suffix">
+    <div class="header-suffix" [class.disabled]="totalCheckedNumber === 0">
         <mat-icon matRipple [matMenuTriggerFor]="mailMenu">mail_outline</mat-icon>
         <mat-icon matRipple (click)="deleteGuests()">delete</mat-icon>
     </div>
@@ -52,6 +52,7 @@
         </div>
         <div class="content">
             <p>{{user.name}} ({{user.person + user.kids}}명)</p>
+            <p>{{user.customerMemo}}</p>
         </div>
         <div class="suffix" matRipple (click)="$event.stopPropagation()" [matMenuTriggerFor]="statusMenu" [matMenuTriggerData]="{user: user}">
             <p>{{status(user)}}</p>

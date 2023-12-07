@@ -9,6 +9,7 @@ import { BOOKING_COLLECTION } from 'reservation/service/booking/booking.service.
 import { CalendarService } from 'reservation/service/calendar/calendar.service';
 import { BehaviorSubject, ReplaySubject, debounceTime } from 'rxjs';
 import * as Moment from 'moment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface IManagerService {
     add(bookingInfo: CustomerInfo): Promise<CustomerInfo>;
@@ -28,7 +29,8 @@ export class ManagerService implements IManagerService {
     constructor(
         private store: AngularFirestore,
         private calendarService: CalendarService,
-        private bookingService: BookingService
+        private bookingService: BookingService,
+        private snackBar: MatSnackBar
     ) {
         //패스워드 통과하면 sub걸어야 함.
         this._subscribeUserDB();
@@ -163,13 +165,25 @@ export class ManagerService implements IManagerService {
     }
 
     add(bookingInfo: CustomerInfo): Promise<CustomerInfo> {
-        return this.bookingService.add(bookingInfo);
+        return this.bookingService.add(bookingInfo).then((v) => {
+            this.snackBar.open(`${v.name}님 추가 성공`, null, {
+                duration: 2000,
+            });
+            return v;
+        });
     }
     update(bookingInfo: CustomerInfo): Promise<CustomerInfo> {
-        return this.bookingService.update(
-            bookingInfo,
-            this.customerDB$.getValue().find((v) => v.id === bookingInfo.id)
-        );
+        return this.bookingService
+            .update(
+                bookingInfo,
+                this.customerDB$.getValue().find((v) => v.id === bookingInfo.id)
+            )
+            .then((v) => {
+                this.snackBar.open(`${v.name}님 업데이트 성공`, null, {
+                    duration: 2000,
+                });
+                return v;
+            });
     }
     delete(id: string): Promise<string> {
         return this.store
@@ -181,6 +195,10 @@ export class ManagerService implements IManagerService {
                 const user = this.customerDB$
                     .getValue()
                     .find((v) => v.id === id);
+
+                this.snackBar.open(`${user.name}님 예약 삭제 성공`, null, {
+                    duration: 2000,
+                });
                 if (user.status !== 'cancel') {
                     return this.calendarService
                         .update({ ...user, status: 'cancel' }, user)
