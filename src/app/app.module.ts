@@ -1,20 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-
-import { GuestListComponent } from './guest-list/guest-list.component';
-import { FooterComponent } from './footer/footer.component';
 import { MaterialModule } from './material.module';
 import { FormsModule } from '@angular/forms';
-import { HolidayService } from 'reservation/service/holiday/holiday.service';
-import { ManagerService } from './manager.service';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from 'reservation/environments/environment';
+import { HolidayService } from 'reservation/service/holiday/holiday.service';
+import { ManagerService } from './manager.service';
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+import { FooterComponent } from './footer/footer.component';
+import { GuestListComponent } from './guest-list/guest-list.component';
+import { GuestDetailComponent } from './guest-detail/guest-detail.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [
@@ -22,6 +23,8 @@ import { environment } from 'reservation/environments/environment';
         HomeComponent,
         GuestListComponent,
         FooterComponent,
+        GuestDetailComponent,
+        CalendarComponent,
     ],
     imports: [
         BrowserModule,
@@ -31,6 +34,7 @@ import { environment } from 'reservation/environments/environment';
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule,
         AngularFireAuthModule,
+        HttpClientModule,
     ],
     providers: [HolidayService, ManagerService],
     bootstrap: [AppComponent],

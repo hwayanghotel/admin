@@ -1,0 +1,48 @@
+@import "../guest-list/guest-list.component.scss";
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    justify-content: center;
+
+    .answer-box {
+        margin: 0.5rem 0;
+        align-items: baseline;
+        width: 100%;
+        display: flex;
+
+        justify-content: space-between;
+        align-items: center;
+
+        .select-number {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            mat-icon {
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-width: 3rem;
+                height: 3rem;
+            }
+
+            p {
+                width: 1.5rem;
+                text-align: center;
+            }
+
+            p:last-child {
+                margin-left: 1rem;
+                text-align: end;
+                color: black;
+            }
+        }
+    }
+}
+
+p {
+    font-size: 1rem;
+}

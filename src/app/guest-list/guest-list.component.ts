@@ -2,6 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
 import { ManagerService } from '../manager.service';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
+import { Router } from '@angular/router';
+import * as Moment from 'moment';
 
 interface Guest extends CustomerInfo {
     checked: boolean;
@@ -13,12 +15,18 @@ interface Guest extends CustomerInfo {
     styleUrls: ['./guest-list.component.scss'],
 })
 export class GuestListComponent implements OnDestroy {
+    startDate: Moment.Moment;
+    endDate: Moment.Moment;
     searchInput: string;
+    showCalendar: boolean;
     private _isSearch: boolean;
     private _db: Guest[] = [];
-
     private _subscription: Subscription[] = [];
-    constructor(private managerService: ManagerService) {
+
+    constructor(
+        private managerService: ManagerService,
+        private router: Router
+    ) {
         this._subscription.push(
             this.managerService.customerDB$
                 .pipe(debounceTime(1000))
@@ -65,8 +73,9 @@ export class GuestListComponent implements OnDestroy {
     }
 
     get db(): Guest[] {
+        let db = this._db;
         if (this.searchInput) {
-            return this._db.filter(
+            db = db.filter(
                 (user) =>
                     user.tel.includes(this.searchInput) ||
                     (user.customerMemo &&
@@ -80,7 +89,20 @@ export class GuestListComponent implements OnDestroy {
                         ).length > 0)
             );
         }
-        return this._db;
+        if (this.startDate) {
+            db = db.filter(
+                (user) =>
+                    user.date.format('YYMMDD') >=
+                    this.startDate.format('YYMMDD')
+            );
+        }
+        if (this.endDate) {
+            db = db.filter(
+                (user) =>
+                    user.date.format('YYMMDD') <= this.endDate.format('YYMMDD')
+            );
+        }
+        return db;
     }
 
     addGuest() {
@@ -96,6 +118,7 @@ export class GuestListComponent implements OnDestroy {
     }
 
     showDetailUser(user: Guest) {
+        this.router.navigate(['/guest-detail'], { queryParams: user });
         console.warn('showDetailUser', user.name);
     }
 

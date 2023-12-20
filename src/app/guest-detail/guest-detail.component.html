@@ -1,0 +1,60 @@
+<div class="header">
+    <mat-icon class="header-prefix" mat-icon matRipple (click)="onBackButton()">keyboard_arrow_left</mat-icon>
+    <div class="header-suffix">
+        <mat-icon matRipple [matMenuTriggerFor]="menu">more_vert</mat-icon>
+    </div>
+</div>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item>수정?</button>
+    <button mat-menu-item>취소?</button>
+    <button mat-menu-item>삭제?</button>
+</mat-menu>
+
+
+<div class="content-container">
+    <div class="answer-box">
+        <p>예약번호</p>
+        <p>{{customerInfo.id}}</p>
+    </div>
+    <div class="answer-box">
+        <p>상태</p>
+        <p>{{status}}</p>
+    </div>
+    <div class="answer-box">
+        <p>성함</p>
+        <p>{{customerInfo.name}}</p>
+    </div>
+    <div class="answer-box">
+        <p>전화번호</p>
+        <p>{{customerInfo.tel}}</p>
+    </div>
+    <div class="answer-box">
+        <p>인원</p>
+        <p class="answer">{{customerInfo.person + customerInfo.kids}}</p>
+    </div>
+    <div class="answer-box">
+        <p>날짜</p>
+        <p class="answer">{{customerInfo.date.format("YYYY. MM. DD(dd)")}}</p>
+    </div>
+    <div class="answer-box" *ngIf="bookingFlatTable">
+        <p>평상 대여</p>
+        <p class="answer">{{bookingFlatTable}}</p>
+    </div>
+    <div class="answer-box" *ngIf="bookingFoods">
+        <p>식사 예약</p>
+        <p class="answer" [innerHTML]="bookingFoods"></p>
+    </div>
+    <div class="answer-box">
+        <p>차량등록</p>
+        <p>{{customerInfo.cars.length}}대<br>{{carList}}</p>
+    </div>
+    <div class="answer-box" *ngIf="bookingFlatTable">
+        <p>평상 예약금</p>
+        <p>{{cost | number}}원</p>
+    </div>
+    <div class="answer-box memo-box">
+        <p>요청 사항</p>
+        <textarea [placeholder]="'요청 사항'" [(ngModel)]="memo"></textarea>
+    </div>
+</div>

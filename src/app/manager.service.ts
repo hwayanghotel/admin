@@ -196,7 +196,7 @@ export class ManagerService implements IManagerService {
                     .getValue()
                     .find((v) => v.id === id);
 
-                this.snackBar.open(`${user.name}님 예약 삭제 성공`, null, {
+                this.snackBar.open(`${user.name}님 삭제 성공`, null, {
                     duration: 2000,
                 });
                 if (user.status !== 'cancel') {

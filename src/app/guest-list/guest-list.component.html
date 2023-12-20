@@ -1,23 +1,20 @@
 <div class="header" *ngIf="!showCheckbox">
     <mat-icon class="header-prefix" mat-icon matRipple (click)="onBackButton()">keyboard_arrow_left</mat-icon>
 
-    <div class="header-input">
+    <div class="header-content">
         <input *ngIf="isSearch" [(ngModel)]="searchInput">
+        <div matRipple *ngIf="!isSearch" (click)="showCalendar = !showCalendar">
+            <mat-icon>calendar_today</mat-icon>
+            <p *ngIf="!startDate && !endDate">전체 기간</p>
+            <p *ngIf="startDate || endDate">{{startDate? startDate.format("MM/DD") : ""}} ~ {{endDate? endDate.format("MM/DD") : ""}}</p>
+        </div>
     </div>
     <div class="header-suffix">
         <mat-icon matRipple *ngIf="!isSearch" (click)="isSearch=true">search</mat-icon>
         <mat-icon matRipple *ngIf="isSearch" (click)="isSearch=false">clear</mat-icon>
-
         <mat-icon matRipple (click)="addGuest()">add</mat-icon>
-        <mat-icon matRipple [matMenuTriggerFor]="menu">more_vert</mat-icon>
     </div>
 </div>
-
-<mat-menu #menu="matMenu">
-    <button mat-menu-item>수정?</button>
-    <button mat-menu-item>취소?</button>
-    <button mat-menu-item>삭제?</button>
-</mat-menu>
 
 <div class="header" *ngIf="showCheckbox">
     <div class="header-prefix">
@@ -38,6 +35,8 @@
     <button mat-menu-item>주차등록 문자 전송</button>
     <button mat-menu-item>문자 전송</button>
 </mat-menu>
+
+<calendar *ngIf="showCalendar" [isDateRange]="true" [(startDate)]="startDate" [(endDate)]="endDate"></calendar>
 
 <div class="list">
     <div class="list-item" *ngFor="let user of db" mat-ripple
