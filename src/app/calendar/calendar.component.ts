@@ -1,11 +1,9 @@
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import * as Moment from 'moment';
-import { CalendarService } from 'reservation/service/calendar/calendar.service';
+import { Component } from '@angular/core';
+import * as moment from 'moment';
 import { HolidayService } from 'reservation/service/holiday/holiday.service';
 
-export interface ICalendar {
-    date: Moment.Moment;
+interface ICalendar {
+    date: moment.Moment;
     isHoliday?: boolean;
 }
 
@@ -15,194 +13,61 @@ export interface ICalendar {
     styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent {
-    @Input() date = Moment();
-    @Input() isDateRange: boolean = false;
+    calendar: ICalendar[][] = [];
+    today = moment();
+    selectedDate: moment.Moment = moment();
+    selectedMonth: moment.Moment = moment();
 
-    @Output() dateChange = new EventEmitter<Moment.Moment>();
-
-    @Input() startDate: Moment.Moment;
-    @Output() startDateChange = new EventEmitter<Moment.Moment>();
-
-    @Input() endDate: Moment.Moment;
-    @Output() endDateChange = new EventEmitter<Moment.Moment>();
-
-    calendarExpand: boolean = true;
-    selectedMonth: string = this.date.format('YYYY년 MM월');
-    week: string[] = ['일', '월', '화', '수', '목', '금', '토'];
-
-    active: 'start' | 'end' = 'start';
-
-    private _calendar: ICalendar[][] = [];
-    private _weeklyCalendar: ICalendar[] = [];
-
-    constructor(
-        protected holidayService: HolidayService,
-        protected calendarService: CalendarService
-    ) {
+    constructor(protected holidayService: HolidayService) {
         this._setCalendar();
-    }
-
-    get calendar(): ICalendar[][] {
-        if (this.calendarExpand) {
-            return this._calendar;
-        }
-        return [this._weeklyCalendar];
-    }
-
-    showDate(date: ICalendar): number {
-        return date.date.date();
-    }
-
-    isToday(date: ICalendar): boolean {
-        return date.date.format('YYMMDD') === Moment().format('YYMMDD');
-    }
-
-    isDim(date: ICalendar): boolean {
-        return date.date.format('YYMMDD') < Moment().format('YYMMDD');
-    }
-
-    isSelected(date: ICalendar): boolean {
-        if (this.isDateRange) {
-            if (this.startDate && this.endDate) {
-                return (
-                    date.date.format('YYMMDD') >=
-                        this.startDate.format('YYMMDD') &&
-                    date.date.format('YYMMDD') <= this.endDate.format('YYMMDD')
-                );
-            }
-            if (!this.startDate && !this.endDate) {
-                return false;
-            }
-        }
-        return date.date.format('YYMMDD') === this.date.format('YYMMDD');
-    }
-
-    setSelectedDate(date: ICalendar) {
-        if (this.isDateRange) {
-            if (this.active === 'start') {
-                this.date = date.date;
-                this.startDate = date.date;
-                this.dateChange.emit(this.date);
-                this.startDateChange.emit(this.date);
-                this.active = 'end';
-                if (
-                    this.endDate &&
-                    this.startDate.format('YYMMDD') >
-                        this.endDate.format('YYMMDD')
-                ) {
-                    this.endDate = undefined;
-                    this.endDateChange.emit(undefined);
-                }
-            } else if (this.active === 'end') {
-                if (
-                    !this.startDate ||
-                    this.startDate.format('YYMMDD') <=
-                        date.date.format('YYMMDD')
-                ) {
-                    this.date = date.date;
-                    this.endDate = date.date;
-                    this.dateChange.emit(this.date);
-                    this.endDateChange.emit(this.date);
-                }
-                this.active = 'start';
-            }
-        } else {
-            this.date = date.date;
-            this.dateChange.emit(this.date);
-        }
-    }
-
-    moveCalendar(direction: -1 | 1) {
-        if (this.calendarExpand) {
-            const date = Moment(this.date).add(direction, 'month');
-            if (date.format('YYMM') === Moment().format('YYMM')) {
-                this.date = Moment();
-            } else {
-                this.date = date;
-                this.dateChange.emit(this.date);
-            }
-        }
-        if (!this.calendarExpand) {
-            const date = Moment(this.date).add(direction, 'week');
-            if (date.format('Y-w') === Moment().format('Y-w')) {
-                this.date = Moment();
-            } else {
-                this.date = date;
-                this.dateChange.emit(this.date);
-            }
-        }
-        this._setCalendar();
-    }
-
-    clearDate(type: 'start' | 'end') {
-        if (type === 'start') {
-            this.startDate = undefined;
-            this.startDateChange.emit(undefined);
-        } else {
-            this.endDate = undefined;
-            this.endDateChange.emit(undefined);
-        }
     }
 
     private async _setCalendar() {
-        let calendar: ICalendar[][] = this._initCalendar();
-        for (let i = 0; i < calendar.length; i++) {
-            let isThisWeek = false;
-            for (let j = 0; j < calendar[i].length; j++) {
-                const holidays = await this.holidayService.getHolidays(
-                    calendar[i][j].date
-                );
-                calendar[i][j].isHoliday = holidays.includes(
-                    calendar[i][j].date.date()
-                );
+        const firstDayOfMonth = this.selectedMonth.clone().startOf('month');
+        const lastDayOfMonth = this.selectedMonth.clone().endOf('month');
+        const startDay = moment(firstDayOfMonth).add(
+            -firstDayOfMonth.day(),
+            'days'
+        );
+        const endDay = moment(lastDayOfMonth).add(
+            6 - lastDayOfMonth.day(),
+            'days'
+        );
+        const calendar: ICalendar[][] = [];
+        for (let i = 0; ; i++) {
+            const date = moment(startDay).add(i, 'days');
 
-                if (
-                    calendar[i][j].date.format('YYMMDD') ===
-                    this.date.format('YYMMDD')
-                ) {
-                    isThisWeek = true;
-                }
+            if (!calendar[Math.floor(i / 7)]) {
+                calendar[Math.floor(i / 7)] = [];
             }
-            if (isThisWeek) {
-                this._weeklyCalendar = calendar[i];
+            const holidays = await this.holidayService.getHolidays(date);
+            calendar[Math.floor(i / 7)].push({
+                date: date,
+                isHoliday: holidays.includes(date.date()),
+            });
+            if (date.format('YYMMDD') === endDay.format('YYMMDD')) {
+                break;
             }
         }
-        this._calendar = calendar;
-        this.selectedMonth = this.date.format('YYYY년 MM월');
+        this.calendar = calendar;
     }
 
-    private _initCalendar(): ICalendar[][] {
-        const calendar: ICalendar[][] = [];
-
-        const firstDateOfMonth = Moment(this.date).set('date', 1);
-        const startDate = Moment(firstDateOfMonth).add(
-            'd',
-            -firstDateOfMonth.day()
+    isToday(date: ICalendar): boolean {
+        return date.date.format('YYMMDD') === this.today.format('YYMMDD');
+    }
+    isSelected(date: ICalendar): boolean {
+        return (
+            date.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
         );
-
-        const lastDateOfMonth = Moment(this.date).set(
-            'date',
-            this.date.daysInMonth()
-        );
-        const endDate = Moment(lastDateOfMonth).add(
-            'd',
-            6 - lastDateOfMonth.day()
-        );
-
-        let week: ICalendar[] = [];
-        for (
-            let date = startDate;
-            date.format('YYMMDD') <= endDate.format('YYMMDD');
-            date = Moment(date).add('d', 1)
-        ) {
-            week.push({
-                date: date,
-            });
-            if (date.day() === 6) {
-                calendar.push(week);
-                week = [];
-            }
+    }
+    isOtherMonth(date: ICalendar): boolean {
+        return date.date.format('YYMM') !== this.selectedMonth.format('YYMM');
+    }
+    moveToday() {
+        if (this.selectedMonth.format('YYMM') !== this.today.format('YYMM')) {
+            this.selectedMonth = this.today;
+            this.selectedDate = this.today;
+            this._setCalendar();
         }
-        return calendar;
     }
 }

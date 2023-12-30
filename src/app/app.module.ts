@@ -16,6 +16,7 @@ import { GuestListComponent } from './guest-list/guest-list.component';
 import { GuestDetailComponent } from './guest-detail/guest-detail.component';
 import { CalendarV1Component } from './calendar-v1/calendar-v1.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { HttpClientModule } from '@angular/common/http';
         FooterComponent,
         GuestDetailComponent,
         CalendarV1Component,
+        CalendarComponent,
     ],
     imports: [
         BrowserModule,

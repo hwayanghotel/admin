@@ -1,26 +1,30 @@
+<div class="header">
+    <mat-icon matRipple>menu</mat-icon>
+    <div class="suffix">
+        <mat-icon matRipple>search</mat-icon>
+        <div class="today-button" matRipple>
+            <p (click)="moveToday()">{{today.format("D")}}</p>
+        </div>
+    </div>
+</div>
+
 <div class="calender-container">
-	<div class="dateRange" *ngIf="isDateRange">
-		<p mat-ripple (click)="active = 'start'">시작일: {{startDate? startDate.format("MM/DD") : ""}}
-			<mat-icon *ngIf="startDate" matRipple (click)="clearDate('start')">clear</mat-icon>
-		</p>
-		<p mat-ripple (click)="active = 'end'">종료일: {{endDate? endDate.format("MM/DD") : ""}}
-			<mat-icon *ngIf="endDate" matRipple (click)="clearDate('end')">clear</mat-icon>
-		</p>
-	</div>
-	<div class="month-container">
-		<mat-icon matRipple (click)="moveCalendar(-1)">keyboard_arrow_left</mat-icon>
-		<p (click)="calendarExpand = !calendarExpand">{{selectedMonth}}</p>
-		<mat-icon matRipple (click)="moveCalendar(1)">keyboard_arrow_right</mat-icon>
-	</div>
-	<div class="weekdays-list">
-		<p *ngFor="let day of week">{{day}}</p>
-	</div>
-	<div class="weekday" *ngFor="let weekday of calendar">
-		<div class="date" *ngFor="let date of weekday" matRipple [class.selected]="isSelected(date)"
-			 (click)="setSelectedDate(date)" [class.today]="isToday(date)" [class.dim]="isDim(date)">
-			<p [class.holiday]="date.isHoliday && !isSelected(date)">
-				{{showDate(date)}}
-			</p>
-		</div>
-	</div>
+    <div class="month-container">
+        <mat-icon matRipple>keyboard_arrow_left</mat-icon>
+        <p matRipple>{{selectedMonth.format("YYYY년 MM월")}}</p>
+        <mat-icon matRipple>keyboard_arrow_right</mat-icon>
+    </div>
+    <div class="weekdays-list">
+        <p *ngFor='let day of ["일", "월", "화", "수", "목", "금", "토"]' [class.holiday]="['금','토'].includes(day)">{{day}}</p>
+    </div>
+    <div class="weekday" *ngFor="let weekday of calendar">
+        <div class="date-container" *ngFor="let date of weekday" matRipple (click)="selectedDate = date.date">
+            <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)"
+               [class.other-month]="isOtherMonth(date)">{{date.date.format("D")}}</p>
+            <div class="date-short-content">
+                <p class="flat-table">평상6</p>
+                <p class="chicken">식사14</p>
+            </div>
+        </div>
+    </div>
 </div>
