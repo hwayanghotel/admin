@@ -36,7 +36,7 @@
     <button mat-menu-item>문자 전송</button>
 </mat-menu>
 
-<calendar *ngIf="showCalendar" [isDateRange]="true" [(startDate)]="startDate" [(endDate)]="endDate"></calendar>
+<calendar-v1 *ngIf="showCalendar" [isDateRange]="true" [(startDate)]="startDate" [(endDate)]="endDate"></calendar-v1>
 
 <div class="list">
     <div class="list-item" *ngFor="let user of db" mat-ripple

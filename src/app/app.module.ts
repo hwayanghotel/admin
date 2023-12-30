@@ -14,7 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { FooterComponent } from './footer/footer.component';
 import { GuestListComponent } from './guest-list/guest-list.component';
 import { GuestDetailComponent } from './guest-detail/guest-detail.component';
-import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarV1Component } from './calendar-v1/calendar-v1.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -24,7 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
         GuestListComponent,
         FooterComponent,
         GuestDetailComponent,
-        CalendarComponent,
+        CalendarV1Component,
     ],
     imports: [
         BrowserModule,
