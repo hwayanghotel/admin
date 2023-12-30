@@ -64,10 +64,24 @@ export class CalendarComponent {
         return date.date.format('YYMM') !== this.selectedMonth.format('YYMM');
     }
     moveToday() {
+        this.selectedDate = this.today;
         if (this.selectedMonth.format('YYMM') !== this.today.format('YYMM')) {
             this.selectedMonth = this.today;
-            this.selectedDate = this.today;
             this._setCalendar();
         }
     }
+    changeType() {
+        if (this._type === 'flat-table') this._type = 'food';
+        else if (this._type === 'food') this._type = 'pension';
+        else if (this._type === 'pension') this._type = 'all';
+        else if (this._type === 'all') this._type = 'flat-table';
+    }
+
+    get type(): string {
+        if (this._type === 'flat-table') return '평상';
+        if (this._type === 'food') return '식사';
+        if (this._type === 'pension') return '펜션';
+        return '전체';
+    }
+    private _type: 'flat-table' | 'food' | 'pension' | 'all' = 'all';
 }

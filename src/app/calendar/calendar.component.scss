@@ -15,9 +15,23 @@
             padding: 0.5rem;
 
             p {
+                padding: 0.1rem;
                 text-align: center;
                 border: 2px solid black;
                 border-radius: 30%;
+            }
+        }
+
+        .short-content-type-button {
+            border-radius: 50%;
+            padding: 0.5rem;
+            height: 24px;
+
+            p {
+                text-align: center;
+                border: 2px solid black;
+                border-radius: 30%;
+                padding: 0.1rem;
             }
         }
 
@@ -125,12 +139,16 @@ mat-icon {
 
                     font-size: 0.8rem;
                     font-weight: 400;
+                }
 
-                    &.flat-table {
+                .flat-table {
+                    p {
                         border-left: 0.2rem solid rgb(107, 187, 184);
                     }
+                }
 
-                    &.chicken {
+                .food {
+                    p {
                         border-left: 0.2rem solid rgb(77, 117, 146);
                     }
                 }
