@@ -13,28 +13,27 @@
 
 <div class="calender-container">
     <div class="month-container">
-        <mat-icon matRipple>keyboard_arrow_left</mat-icon>
+        <mat-icon matRipple (click)="moveMonth(-1)">keyboard_arrow_left</mat-icon>
         <p matRipple>{{selectedMonth.format("YYYY년 MM월")}}</p>
-        <mat-icon matRipple>keyboard_arrow_right</mat-icon>
+        <mat-icon matRipple (click)="moveMonth(1)">keyboard_arrow_right</mat-icon>
     </div>
     <div class="weekdays-list">
         <p *ngFor='let day of ["일", "월", "화", "수", "목", "금", "토"]' [class.holiday]="['금','토'].includes(day)">{{day}}</p>
     </div>
     <div class="weekday" *ngFor="let weekday of calendar">
-        <div class="date-container" *ngFor="let date of weekday" matRipple (click)="selectedDate = date.date">
-            <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)"
-               [class.other-month]="isOtherMonth(date)">{{date.date.format("D")}}</p>
+        <div class="date-container" *ngFor="let date of weekday" matRipple (click)="selectedDate = date.date" [class.dim]="needToDimming(date)">
+            <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)">{{date.date.format("D")}}</p>
             <div class="date-short-content">
                 <div *ngIf="['전체','평상'].includes(type)" class="flat-table">
-                    <p>평상6</p>
-                    <p>데크4</p>
+                    <p>{{shortFlatTable(date)}}</p>
+                    <p>{{shortDechTable(date)}}</p>
                 </div>
                 <div *ngIf="['전체','식사'].includes(type)" class="food">
-                    <p>백숙16</p>
-                    <p>버섯4</p>
+                    <p>{{shortChicken(date)}}</p>
+                    <p>{{shortMushroom(date)}}</p>
                 </div>
                 <div *ngIf="['전체','펜션'].includes(type)" class="pension">
-                    <!-- 준비중 -->
+                    <!-- ING -->
                 </div>
             </div>
         </div>

@@ -124,10 +124,6 @@ mat-icon {
                 &.holiday {
                     color: #e34c4c;
                 }
-
-                &.other-month {
-                    opacity: 0.3;
-                }
             }
 
             .date-short-content {
@@ -135,7 +131,7 @@ mat-icon {
 
                 p {
                     margin-bottom: 0.2rem;
-                    padding: 0 0.2rem;
+                    padding: 0 0.1rem;
 
                     font-size: 0.8rem;
                     font-weight: 400;
@@ -160,4 +156,8 @@ mat-icon {
             }
         }
     }
+}
+
+.dim {
+    opacity: 0.4;
 }
