@@ -1,41 +1,48 @@
-<div class="header">
-    <mat-icon matRipple>menu</mat-icon>
-    <div class="suffix">
-        <mat-icon matRipple>search</mat-icon>
-        <div class="today-button" matRipple>
-            <p (click)="moveToday()">{{today.format("D")}}</p>
-        </div>
-        <div class="short-content-type-button">
-            <p (click)="changeType()">{{type}}</p>
+<mat-drawer-container autosize>
+    <div class="header">
+        <mat-icon matRipple (click)="drawer.toggle()">menu</mat-icon>
+        <div class="suffix">
+            <mat-icon matRipple>search</mat-icon>
+            <div class="today-button" matRipple>
+                <p (click)="moveToday()">{{today.format("D")}}</p>
+            </div>
+            <div class="short-content-type-button">
+                <p (click)="changeType()">{{type}}</p>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="calender-container">
-    <div class="month-container">
-        <mat-icon matRipple (click)="moveMonth(-1)">keyboard_arrow_left</mat-icon>
-        <p matRipple>{{selectedMonth.format("YYYY년 MM월")}}</p>
-        <mat-icon matRipple (click)="moveMonth(1)">keyboard_arrow_right</mat-icon>
-    </div>
-    <div class="weekdays-list">
-        <p *ngFor='let day of ["일", "월", "화", "수", "목", "금", "토"]' [class.holiday]="['금','토'].includes(day)">{{day}}</p>
-    </div>
-    <div class="weekday" *ngFor="let weekday of calendar">
-        <div class="date-container" *ngFor="let date of weekday" matRipple (click)="selectedDate = date.date" [class.dim]="needToDimming(date)">
-            <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)">{{date.date.format("D")}}</p>
-            <div class="date-short-content">
-                <div *ngIf="['전체','평상'].includes(type)" class="flat-table">
-                    <p>{{shortFlatTable(date)}}</p>
-                    <p>{{shortDechTable(date)}}</p>
-                </div>
-                <div *ngIf="['전체','식사'].includes(type)" class="food">
-                    <p>{{shortChicken(date)}}</p>
-                    <p>{{shortMushroom(date)}}</p>
-                </div>
-                <div *ngIf="['전체','펜션'].includes(type)" class="pension">
-                    <!-- ING -->
+    <div class="calender-container">
+        <div class="month-container">
+            <mat-icon matRipple (click)="moveMonth(-1)">keyboard_arrow_left</mat-icon>
+            <p matRipple>{{selectedMonth.format("YYYY년 MM월")}}</p>
+            <mat-icon matRipple (click)="moveMonth(1)">keyboard_arrow_right</mat-icon>
+        </div>
+        <div class="weekdays-list">
+            <p *ngFor='let day of ["일", "월", "화", "수", "목", "금", "토"]' [class.holiday]="['금','토'].includes(day)">{{day}}</p>
+        </div>
+        <div class="weekday" *ngFor="let weekday of calendar">
+            <div class="date-container" *ngFor="let date of weekday" matRipple (click)="selectedDate = date.date" [class.dim]="needToDimming(date)">
+                <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)">{{date.date.format("D")}}</p>
+                <div class="date-short-content">
+                    <div *ngIf="['전체','평상'].includes(type)" class="flat-table">
+                        <p>{{shortFlatTable(date)}}</p>
+                        <p>{{shortDechTable(date)}}</p>
+                    </div>
+                    <div *ngIf="['전체','식사'].includes(type)" class="food">
+                        <p>{{shortChicken(date)}}</p>
+                        <p>{{shortMushroom(date)}}</p>
+                    </div>
+                    <div *ngIf="['전체','펜션'].includes(type)" class="pension">
+                        <!-- ING -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <mat-drawer #drawer mode="over">
+        <p>Auto-resizing sidenav</p>
+
+    </mat-drawer>
+</mat-drawer-container>

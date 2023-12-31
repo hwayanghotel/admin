@@ -28,6 +28,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { DatePipe } from '@angular/common';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 const modules = [
     MatIconModule,
@@ -35,6 +36,7 @@ const modules = [
     MatMenuModule,
     BrowserAnimationsModule,
     MatCheckboxModule,
+    MatSidenavModule,
     // MatDialogModule,
     // MatInputModule,
     // MatFormFieldModule,
