@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { HolidayService } from 'reservation/service/holiday/holiday.service';
 import { ManagerService } from '../manager.service';
@@ -15,7 +15,7 @@ interface ICalendar {
     templateUrl: './calendar.component.html',
     styleUrls: ['./calendar.component.scss'],
 })
-export class CalendarComponent {
+export class CalendarComponent implements AfterViewInit {
     @ViewChild('Calendar') Calendar!: ElementRef<HTMLElement>;
     @ViewChild('ListContainer') ListContainer!: ElementRef<HTMLElement>;
     calendarExpandLevel: number = 3; //1,2,3
@@ -40,6 +40,10 @@ export class CalendarComponent {
                     this._db = db;
                 })
         );
+    }
+
+    ngAfterViewInit() {
+        this._updateListConatinerHeight();
     }
 
     private async _setCalendar() {
