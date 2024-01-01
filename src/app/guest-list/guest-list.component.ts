@@ -1,9 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
 import { ManagerService } from '../manager.service';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
 import { Router } from '@angular/router';
-import * as Moment from 'moment';
+import * as moment from 'moment';
 
 interface Guest extends CustomerInfo {
     checked: boolean;
@@ -15,11 +15,8 @@ interface Guest extends CustomerInfo {
     styleUrls: ['./guest-list.component.scss'],
 })
 export class GuestListComponent implements OnDestroy {
-    startDate: Moment.Moment;
-    endDate: Moment.Moment;
-    searchInput: string;
-    showCalendar: boolean;
-    private _isSearch: boolean;
+    @Input() selectedDate: moment.Moment;
+    @Input() searchInput: string;
     private _db: Guest[] = [];
     private _subscription: Subscription[] = [];
 
@@ -62,16 +59,6 @@ export class GuestListComponent implements OnDestroy {
         return this.db.filter((user) => user.checked).length;
     }
 
-    get isSearch(): boolean {
-        return this._isSearch;
-    }
-    set isSearch(v: boolean) {
-        this._isSearch = v;
-        if (!v) {
-            this.searchInput = undefined;
-        }
-    }
-
     get db(): Guest[] {
         let db = this._db;
         if (this.searchInput) {
@@ -88,25 +75,14 @@ export class GuestListComponent implements OnDestroy {
                             car.includes(this.searchInput)
                         ).length > 0)
             );
-        }
-        if (this.startDate) {
+        } else if (this.selectedDate) {
             db = db.filter(
                 (user) =>
-                    user.date.format('YYMMDD') >=
-                    this.startDate.format('YYMMDD')
-            );
-        }
-        if (this.endDate) {
-            db = db.filter(
-                (user) =>
-                    user.date.format('YYMMDD') <= this.endDate.format('YYMMDD')
+                    user.date.format('YYMMDD') ===
+                    this.selectedDate.format('YYMMDD')
             );
         }
         return db;
-    }
-
-    addGuest() {
-        console.warn('addGuest');
     }
 
     deleteGuests() {
@@ -140,17 +116,34 @@ export class GuestListComponent implements OnDestroy {
         this.managerService.update({ ...user, status: status });
     }
 
+    get readyList(): Guest[] {
+        return this._db.filter(
+            (v) =>
+                v.status === 'ready' &&
+                v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
+        );
+    }
+
+    get flatTableList(): Guest[] {
+        return this._db.filter(
+            (v) =>
+                v.status !== 'ready' &&
+                (v.flatTable > 0 || v.dechTable > 0) &&
+                v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
+        );
+    }
+
     touchStart(user: Guest) {
         if (!this._timeout) {
             if (!this.showCheckbox) {
                 this._timeout = setTimeout(() => {
                     this.showCheckbox = true;
                     user.checked = true;
-                }, 300);
+                }, 1000);
             } else {
                 this._timeout = setTimeout(() => {
                     this.showCheckbox = false;
-                }, 300);
+                }, 1000);
             }
         }
     }
@@ -161,10 +154,6 @@ export class GuestListComponent implements OnDestroy {
         }
     }
     private _timeout: any;
-
-    onBackButton() {
-        window.history.back();
-    }
 
     ngOnDestroy(): void {
         for (let sub of this._subscription) {

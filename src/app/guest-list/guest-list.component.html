@@ -1,21 +1,3 @@
-<div class="header" *ngIf="!showCheckbox">
-    <mat-icon class="header-prefix" mat-icon matRipple (click)="onBackButton()">keyboard_arrow_left</mat-icon>
-
-    <div class="header-content">
-        <input *ngIf="isSearch" [(ngModel)]="searchInput">
-        <div matRipple *ngIf="!isSearch" (click)="showCalendar = !showCalendar">
-            <mat-icon>calendar_today</mat-icon>
-            <p *ngIf="!startDate && !endDate">전체 기간</p>
-            <p *ngIf="startDate || endDate">{{startDate? startDate.format("MM/DD") : ""}} ~ {{endDate? endDate.format("MM/DD") : ""}}</p>
-        </div>
-    </div>
-    <div class="header-suffix">
-        <mat-icon matRipple *ngIf="!isSearch" (click)="isSearch=true">search</mat-icon>
-        <mat-icon matRipple *ngIf="isSearch" (click)="isSearch=false">clear</mat-icon>
-        <mat-icon matRipple (click)="addGuest()">add</mat-icon>
-    </div>
-</div>
-
 <div class="header" *ngIf="showCheckbox">
     <div class="header-prefix">
         <mat-checkbox [(ngModel)]="totalChecked" (click)="$event.stopPropagation()"></mat-checkbox>
@@ -36,28 +18,53 @@
     <button mat-menu-item>문자 전송</button>
 </mat-menu>
 
-<calendar-v1 *ngIf="showCalendar" [isDateRange]="true" [(startDate)]="startDate" [(endDate)]="endDate"></calendar-v1>
-
-<div class="list">
-    <div class="list-item" *ngFor="let user of db" mat-ripple
-         (click)="showCheckbox? user.checked = !user.checked : showDetailUser(user)"
-         (touchstart)="touchStart(user)" (touchend)="touchEnd()">
-        <div class="checkbox" *ngIf="showCheckbox">
-            <mat-checkbox [(ngModel)]="user.checked" (click)="$event.stopPropagation()"></mat-checkbox>
-        </div>
-        <div class="prefix">
-            <p>{{user.date.format("MM/DD")}}</p>
-            <p>{{type(user)}}</p>
-        </div>
-        <div class="content">
-            <p>{{user.name}} ({{user.person + user.kids}}명)</p>
-            <p>{{user.customerMemo}}</p>
-        </div>
-        <div class="suffix" matRipple (click)="$event.stopPropagation()" [matMenuTriggerFor]="statusMenu" [matMenuTriggerData]="{user: user}">
-            <p>{{status(user)}}</p>
+<div *ngIf="readyList.length>0">
+    <p class="sub-title" *ngIf="readyList.length > 0">예약 대기 상태</p>
+    <div class="list">
+        <div class="list-item" *ngFor="let user of readyList" mat-ripple
+             (click)="showCheckbox? user.checked = !user.checked : showDetailUser(user)"
+             (touchstart)="touchStart(user)" (touchend)="touchEnd()">
+            <div class="checkbox" *ngIf="showCheckbox">
+                <mat-checkbox [(ngModel)]="user.checked" (click)="$event.stopPropagation()"></mat-checkbox>
+            </div>
+            <div class="prefix">
+                <p>{{type(user)}}</p>
+            </div>
+            <div class="content">
+                <p class="content-title">{{user.name}} ({{user.person + user.kids}}명)</p>
+                <p class="content-desc">{{user.customerMemo}}</p>
+            </div>
+            <div class="suffix" matRipple (click)="$event.stopPropagation()" [matMenuTriggerFor]="statusMenu" [matMenuTriggerData]="{user: user}">
+                <p>{{status(user)}}</p>
+            </div>
         </div>
     </div>
 </div>
+
+<div *ngIf="flatTableList.length>0">
+    <p class="sub-title" *ngIf="flatTableList.length > 0">평상 예약</p>
+    <div class="list">
+        <div class="list-item" *ngFor="let user of flatTableList" mat-ripple
+             (click)="showCheckbox? user.checked = !user.checked : showDetailUser(user)"
+             (touchstart)="touchStart(user)" (touchend)="touchEnd()">
+            <div class="checkbox" *ngIf="showCheckbox">
+                <mat-checkbox [(ngModel)]="user.checked" (click)="$event.stopPropagation()"></mat-checkbox>
+            </div>
+            <div class="prefix">
+                <p *ngIf="user.flatTable>0">평상{{user.flatTable}}</p>
+                <p *ngIf="user.dechTable>0">데크{{user.dechTable}}</p>
+            </div>
+            <div class="content">
+                <p class="content-title">{{user.name}} ({{user.person + user.kids}}명)</p>
+                <p class="content-desc">{{user.customerMemo}}</p>
+            </div>
+            <div class="suffix" matRipple (click)="$event.stopPropagation()" [matMenuTriggerFor]="statusMenu" [matMenuTriggerData]="{user: user}">
+                <p>{{status(user)}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <mat-menu #statusMenu="matMenu">
     <ng-template matMenuContent let-user="user">

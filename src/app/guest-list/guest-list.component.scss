@@ -1,35 +1,22 @@
+:host {
+    --border-color: rgba(0, 0, 0, 0.1);
+    --background-color: #FAFAFA;
+}
+
 .header {
-    margin: 1rem;
+    background-color: var(--background-color);
+    position: fixed;
+    top: 0;
+    margin: 0.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 10;
+    width: -webkit-fill-available;
 
     .header-prefix {
         display: flex;
         align-items: center;
-    }
-
-    .header-content {
-        flex: 1;
-        margin: 0 0.5rem;
-
-        input {
-            width: 100%;
-            border: 0.1px solid gray;
-            font-size: 1rem;
-        }
-
-        div {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            height: 24px;
-            padding: 0.3rem;
-
-            p {
-                margin-left: 0.3rem;
-            }
-        }
     }
 
     mat-icon {
@@ -38,20 +25,38 @@
     }
 }
 
+.sub-title {
+    margin-left: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
+    color: gray;
+}
+
 .list {
+    background-color: white;
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+
     .list-item {
         display: flex;
-        align-items: center;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--border-color);
 
         .prefix {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
+            padding-right: 1rem;
         }
 
         .content {
-            width: 55%;
+            .content-title {
+                padding-left: 0.5rem;
+                border-left: 0.2rem solid red;
+            }
+
+            .content-desc {
+                color: rgba(1, 1, 1, 0.7);
+                padding-left: 0.7rem;
+            }
         }
 
         .suffix {
@@ -62,6 +67,10 @@
             padding: 1rem;
         }
     }
+
+    .list-item:last-child {
+        border-bottom: 0px;
+    }
 }
 
 .disabled {
@@ -71,7 +80,7 @@
 
 p {
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 ::ng-deep .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background,
@@ -83,4 +92,9 @@ p {
 
 ::ng-deep .mdc-checkbox .mdc-checkbox__native-control:focus:checked~.mdc-checkbox__ripple {
     background-color: black !important;
+}
+
+mat-checkbox {
+    margin-left: -0.5rem;
+    margin-top: -8px;
 }
