@@ -170,6 +170,19 @@ mat-icon {
 
                     font-size: 0.8rem;
                     font-weight: 400;
+
+                    &.shortest {
+                        opacity: 0;
+                        margin-top: 0.2rem;
+                        margin-bottom: 0.6rem;
+                        padding: 0;
+                        font-weight: 600;
+                        line-height: 0;
+
+                        &.show {
+                            opacity: 1;
+                        }
+                    }
                 }
 
                 .flat-table {
@@ -197,7 +210,7 @@ mat-icon {
     opacity: 0.4;
 }
 
-guest-list {
+.list-container {
     background-color: var(--background-color);
     min-height: 101%;
 }

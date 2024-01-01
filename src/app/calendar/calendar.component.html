@@ -37,9 +37,14 @@
                         <!-- ING -->
                     </div>
                 </div>
+                <div class="date-short-content" *ngIf="calendarExpandLevel===2">
+                    <p class="shortest" [class.show]="shortFlatTable(date) || shortDechTable(date) || shortChicken(date) || shortMushroom(date)">•</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<guest-list #ListContainer></guest-list>
+<div #ListContainer class="list-container">
+    <guest-list [selectedDate]="selectedDate"></guest-list>
+</div>

@@ -5,10 +5,6 @@ import { ManagerService } from '../manager.service';
 import { Subscription, debounceTime } from 'rxjs';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
 
-interface Guest extends CustomerInfo {
-    checked: boolean;
-}
-
 interface ICalendar {
     date: moment.Moment;
     isHoliday?: boolean;
@@ -187,6 +183,7 @@ export class CalendarComponent {
         }
         if (previous.month() !== this.selectedDate.month()) {
             this._setCalendar();
+            this._updateListConatinerHeight();
         }
         this._setSelectedWeek();
     }
@@ -200,6 +197,7 @@ export class CalendarComponent {
 
         if (previous.month() !== this.selectedDate.month()) {
             this._setCalendar();
+            this._updateListConatinerHeight();
         }
         this._setSelectedWeek();
     }
@@ -221,6 +219,7 @@ export class CalendarComponent {
 
         if (previous.month() !== this.selectedDate.month()) {
             this._setCalendar();
+            this._updateListConatinerHeight();
         }
         this._setSelectedWeek();
     }
