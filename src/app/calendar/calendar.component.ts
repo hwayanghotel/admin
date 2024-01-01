@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { HolidayService } from 'reservation/service/holiday/holiday.service';
 import { ManagerService } from '../manager.service';
@@ -16,6 +16,8 @@ interface ICalendar {
     styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent {
+    @ViewChild('Calendar') Calendar!: ElementRef<HTMLElement>;
+    @ViewChild('ListContainer') ListContainer!: ElementRef<HTMLElement>;
     calendarExpandLevel: number = 3; //1,2,3
     today = moment();
     selectedDate: moment.Moment = moment();
@@ -231,18 +233,28 @@ export class CalendarComponent {
 
             // 상단에서 하단으로 스크롤 감지
             if (startY - endY > 40) {
-                console.log('캘린더 축소', startY, endY, window.scrollY);
+                // console.log('캘린더 축소', startY, endY, window.scrollY);
                 if (window.scrollY > 0) {
                     if (this.calendarExpandLevel !== 1) {
                         this.calendarExpandLevel--;
+                        if (this.ListContainer) {
+                            setTimeout(() => {
+                                this.ListContainer.nativeElement.style.paddingTop = `${this.Calendar.nativeElement.offsetHeight}px`;
+                            }, 100);
+                        }
                     }
                 }
                 // 여기에 실행하고자 하는 동작을 추가하세요.
             } else if (startY - endY < -40) {
-                console.log('캘린더 확장', startY, endY, window.scrollY);
+                // console.log('캘린더 확장', startY, endY, window.scrollY);
                 if (window.scrollY === 0) {
                     if (this.calendarExpandLevel < 3) {
                         this.calendarExpandLevel++;
+                        if (this.ListContainer) {
+                            setTimeout(() => {
+                                this.ListContainer.nativeElement.style.paddingTop = `${this.Calendar.nativeElement.offsetHeight}px`;
+                            }, 100);
+                        }
                     }
                 }
             }

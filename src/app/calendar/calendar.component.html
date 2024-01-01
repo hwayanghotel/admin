@@ -1,4 +1,4 @@
-<div class="header">
+<div #Calendar class="fixed" [class.no-height]="calendarExpandLevel < 3">
     <div class="top-header">
         <mat-icon matRipple>menu</mat-icon>
         <div class="suffix">
@@ -11,64 +11,119 @@
             </div>
         </div>
     </div>
-    <div class="calendar-header">
-        <div class="month-container">
-            <mat-icon matRipple (click)="moveMonth(-1)">keyboard_arrow_left</mat-icon>
-            <p matRipple>{{selectedMonth.format("YYYY년 MM월")}}</p>
-            <mat-icon matRipple (click)="moveMonth(1)">keyboard_arrow_right</mat-icon>
-        </div>
-        <div class="weekdays-list">
-            <p *ngFor='let day of ["일", "월", "화", "수", "목", "금", "토"]' [class.holiday]="['금','토'].includes(day)">{{day}}</p>
-        </div>
+    <div class="month-container">
+        <mat-icon matRipple (click)="moveMonth(-1)">keyboard_arrow_left</mat-icon>
+        <p matRipple>{{selectedMonth.format("YYYY년 MM월")}}</p>
+        <mat-icon matRipple (click)="moveMonth(1)">keyboard_arrow_right</mat-icon>
     </div>
-</div>
+    <div class="weekdays-list">
+        <p *ngFor='let day of ["일", "월", "화", "수", "목", "금", "토"]' [class.holiday]="['금','토'].includes(day)">{{day}}</p>
+    </div>
 
-<div class="calender-container" [class.no-height]="calendarExpandLevel < 3">
-    <div class="weekday" *ngFor="let weekday of calendar">
-        <div class="date-container" *ngFor="let date of weekday" matRipple (click)="setSelectedDate(date)" [class.dim]="needToDimming(date)">
-            <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)">{{date.date.format("D")}}</p>
-            <div class="date-short-content" *ngIf="calendarExpandLevel===3">
-                <div *ngIf="['전체','평상'].includes(type)" class="flat-table">
-                    <p>{{shortFlatTable(date)}}</p>
-                    <p>{{shortDechTable(date)}}</p>
-                </div>
-                <div *ngIf="['전체','식사'].includes(type)" class="food">
-                    <p>{{shortChicken(date)}}</p>
-                    <p>{{shortMushroom(date)}}</p>
-                </div>
-                <div *ngIf="['전체','펜션'].includes(type)" class="pension">
-                    <!-- ING -->
+    <div class="calender-container">
+        <div class="weekday" *ngFor="let weekday of calendar">
+            <div class="date-container" *ngFor="let date of weekday" matRipple (click)="setSelectedDate(date)" [class.dim]="needToDimming(date)">
+                <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)">{{date.date.format("D")}}</p>
+                <div class="date-short-content" *ngIf="calendarExpandLevel===3">
+                    <div *ngIf="['전체','평상'].includes(type)" class="flat-table">
+                        <p>{{shortFlatTable(date)}}</p>
+                        <p>{{shortDechTable(date)}}</p>
+                    </div>
+                    <div *ngIf="['전체','식사'].includes(type)" class="food">
+                        <p>{{shortChicken(date)}}</p>
+                        <p>{{shortMushroom(date)}}</p>
+                    </div>
+                    <div *ngIf="['전체','펜션'].includes(type)" class="pension">
+                        <!-- ING -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
 
+<div #ListContainer>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
 
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
 
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
 
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
-<p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+    <p>하이하이</p>
+</div>
