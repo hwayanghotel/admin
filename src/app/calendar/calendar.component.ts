@@ -311,6 +311,16 @@ export class CalendarComponent implements AfterViewInit {
         }
     }
 
+    isReadyStatus(date: ICalendar): boolean {
+        return (
+            this._db.filter(
+                (v) =>
+                    v.date.format('YYMMDD') === date.date.format('YYMMDD') &&
+                    v.status === 'ready'
+            ).length > 0
+        );
+    }
+
     get type(): string {
         if (this._type === 'flat-table') return '평상';
         if (this._type === 'food') return '식사';

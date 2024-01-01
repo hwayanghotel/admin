@@ -182,6 +182,10 @@ mat-icon {
                         &.show {
                             opacity: 1;
                         }
+
+                        &.isReady {
+                            color: red;
+                        }
                     }
                 }
 
