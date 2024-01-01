@@ -21,7 +21,6 @@ export class CalendarComponent {
     calendarExpandLevel: number = 3; //1,2,3
     today = moment();
     selectedDate: moment.Moment = moment();
-    selectedMonth: moment.Moment = moment();
     private _selectedWeek: ICalendar[] = [];
     private _calendar: ICalendar[][] = [];
     private _db: CustomerInfo[] = [];
@@ -30,8 +29,8 @@ export class CalendarComponent {
         private holidayService: HolidayService,
         private managerService: ManagerService
     ) {
-        this.setSelectedDate();
         this._setCalendar();
+        this._setSelectedWeek();
 
         this._subscription.push(
             this.managerService.customerDB$
@@ -45,8 +44,8 @@ export class CalendarComponent {
     }
 
     private async _setCalendar() {
-        const firstDayOfMonth = this.selectedMonth.clone().startOf('month');
-        const lastDayOfMonth = this.selectedMonth.clone().endOf('month');
+        const firstDayOfMonth = this.selectedDate.clone().startOf('month');
+        const lastDayOfMonth = this.selectedDate.clone().endOf('month');
         const startDay = firstDayOfMonth
             .clone()
             .add(-firstDayOfMonth.day(), 'days');
@@ -79,16 +78,33 @@ export class CalendarComponent {
         return [this._selectedWeek];
     }
 
-    setSelectedDate(date?: ICalendar) {
+    clickDate(date?: ICalendar) {
+        const previous = this.selectedDate.clone();
+
         if (date) {
             this.selectedDate = date.date;
         } else {
             this.selectedDate = moment();
         }
+        if (previous.month() !== this.selectedDate.month()) {
+            this._setCalendar();
+        }
         this._setSelectedWeek();
     }
 
     private async _setSelectedWeek() {
+        if (
+            this._selectedWeek.length === 7 &&
+            this._selectedWeek[0].date.format('YYMMDD') <=
+                this.selectedDate.format('YYMMDD') &&
+            this.selectedDate.format('YYMMDD') <=
+                this._selectedWeek[6].date.format('YYMMDD')
+        ) {
+            //굳이 set을 변경할 필요 없는 경우엔 return
+            return;
+        }
+
+        //변경 필요 케이스
         this._selectedWeek = [];
         const firstDate = this.selectedDate
             .clone()
@@ -105,10 +121,19 @@ export class CalendarComponent {
         }
     }
 
-    moveMonth(direction: number) {
-        this.selectedMonth.add(direction, 'month');
-        this._setCalendar();
+    async moveMonthOrWeek(direction: number) {
+        const previous = this.selectedDate.clone();
+        this.selectedDate.add(
+            direction,
+            this.calendarExpandLevel > 1 ? 'month' : 'week'
+        );
+
+        if (previous.month() !== this.selectedDate.month()) {
+            this._setCalendar();
+        }
+        this._setSelectedWeek();
     }
+
     isToday(date: ICalendar): boolean {
         return date.date.format('YYMMDD') === this.today.format('YYMMDD');
     }
@@ -121,11 +146,13 @@ export class CalendarComponent {
         return date.date.format('YYMMDD') < this.today.format('YYMMDD');
     }
     moveToday() {
+        const previous = this.selectedDate.clone();
         this.selectedDate = this.today.clone();
-        if (this.selectedMonth.format('YYMM') !== this.today.format('YYMM')) {
-            this.selectedMonth = this.today.clone();
+
+        if (previous.month() !== this.selectedDate.month()) {
             this._setCalendar();
         }
+        this._setSelectedWeek();
     }
     changeType() {
         if (this._type === 'flat-table') this._type = 'food';
@@ -221,15 +248,18 @@ export class CalendarComponent {
 
     private _checkTouch() {
         let startY: any;
+        let startX: any;
 
         document.addEventListener('touchstart', (e) => {
             // 터치 시작 지점 저장
             startY = e.touches[0].clientY;
+            startX = e.touches[0].clientX;
         });
 
         document.addEventListener('touchend', (e) => {
             // 터치 종료 지점 저장
             let endY = e.changedTouches[0].clientY;
+            let endX = e.changedTouches[0].clientX;
 
             // 상단에서 하단으로 스크롤 감지
             if (startY - endY > 40) {
@@ -257,6 +287,10 @@ export class CalendarComponent {
                         }
                     }
                 }
+            } else if (startX - endX > 20) {
+                this.moveMonthOrWeek(1);
+            } else if (startX - endY < 20) {
+                this.moveMonthOrWeek(-1);
             }
         });
     }
