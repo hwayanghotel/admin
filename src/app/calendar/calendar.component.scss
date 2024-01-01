@@ -1,45 +1,105 @@
-mat-drawer-container {
-    height: 100%;
+:host {
+    --top-header-height: 3rem;
+    --month-container-height: 3rem;
+    --weekdays-list-height: 2rem;
+    --total-header-height: calc(var(--top-header-height) + var(--month-container-height) + var(--weekdays-list-height));
+    --calendar-height: calc(100% - var(--total-header-height));
+}
+
+.no-height {
+    height: auto !important;
 }
 
 .header {
-    height: 3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: fixed;
+    background-color: white;
+    z-index: 9;
+    width: 100%;
 
-    .suffix {
+    .top-header {
+        height: var(--top-header-height);
+
         display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-        .today-button {
-            border-radius: 50%;
-            height: 24px;
-            width: 24px;
+        .suffix {
+            display: flex;
 
-            padding: 0.5rem;
+            .today-button {
+                border-radius: 50%;
+                height: 24px;
+                width: 24px;
+                padding: 0.5rem;
 
-            p {
-                padding: 0.1rem;
-                text-align: center;
-                border: 2px solid black;
-                border-radius: 30%;
+                p {
+                    padding: 0.1rem;
+                    text-align: center;
+                    border: 2px solid black;
+                    border-radius: 30%;
+                }
             }
-        }
 
-        .short-content-type-button {
-            border-radius: 50%;
-            padding: 0.5rem;
-            height: 24px;
+            .short-content-type-button {
+                border-radius: 50%;
+                padding: 0.5rem;
+                height: 24px;
 
-            p {
-                text-align: center;
-                border: 2px solid black;
-                border-radius: 30%;
-                padding: 0.1rem;
+                p {
+                    text-align: center;
+                    border: 2px solid black;
+                    border-radius: 30%;
+                    padding: 0.1rem;
+                }
             }
-        }
 
+        }
     }
+
+    .calendar-header {
+        .month-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--month-container-height);
+
+            p {
+                font-size: 1.1rem;
+                font-weight: 600;
+                padding: 0.5rem;
+                border-radius: 1rem;
+            }
+
+            mat-icon {
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-width: 2rem;
+                height: 2rem;
+            }
+        }
+
+        .weekdays-list {
+            display: flex;
+            height: var(--weekdays-list-height);
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+
+            p {
+                font-size: 0.8rem;
+                font-weight: 500;
+                opacity: 0.8;
+
+                &.holiday {
+                    color: #e34c4c;
+                }
+            }
+        }
+    }
+
+
 }
 
 p {
@@ -52,47 +112,11 @@ mat-icon {
 }
 
 .calender-container {
+    padding-top: var(--total-header-height);
     display: flex;
     flex-direction: column;
-    height: calc(100% - 3rem);
-
-    .month-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-
-        p {
-            font-size: 1.1rem;
-            font-weight: 600;
-            padding: 1rem;
-            border-radius: 1rem;
-        }
-
-        mat-icon {
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-width: 2rem;
-            height: 2rem;
-        }
-    }
-
-    .weekdays-list {
-        display: flex;
-        justify-content: space-around;
-
-        p {
-            font-size: 0.8rem;
-            font-weight: 500;
-            opacity: 0.8;
-
-            &.holiday {
-                color: #e34c4c;
-            }
-        }
-    }
+    height: var(--calendar-height);
+    overflow-y: auto;
 
     .weekday {
         display: flex;

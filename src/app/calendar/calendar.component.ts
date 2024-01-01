@@ -16,16 +16,19 @@ interface ICalendar {
     styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent {
-    calendar: ICalendar[][] = [];
+    calendarExpandLevel: number = 3; //1,2,3
     today = moment();
     selectedDate: moment.Moment = moment();
     selectedMonth: moment.Moment = moment();
+    private _selectedWeek: ICalendar[] = [];
+    private _calendar: ICalendar[][] = [];
     private _db: CustomerInfo[] = [];
     private _subscription: Subscription[] = [];
     constructor(
         private holidayService: HolidayService,
         private managerService: ManagerService
     ) {
+        this.setSelectedDate();
         this._setCalendar();
 
         this._subscription.push(
@@ -35,6 +38,8 @@ export class CalendarComponent {
                     this._db = db;
                 })
         );
+
+        this._checkTouch();
     }
 
     private async _setCalendar() {
@@ -62,7 +67,40 @@ export class CalendarComponent {
                 break;
             }
         }
-        this.calendar = calendar;
+        this._calendar = calendar;
+    }
+
+    get calendar(): ICalendar[][] {
+        if (this.calendarExpandLevel > 1) {
+            return this._calendar;
+        }
+        return [this._selectedWeek];
+    }
+
+    setSelectedDate(date?: ICalendar) {
+        if (date) {
+            this.selectedDate = date.date;
+        } else {
+            this.selectedDate = moment();
+        }
+        this._setSelectedWeek();
+    }
+
+    private async _setSelectedWeek() {
+        this._selectedWeek = [];
+        const firstDate = this.selectedDate
+            .clone()
+            .add(-this.selectedDate.day(), 'days');
+        for (let i = 0; i < 7; i++) {
+            const date = firstDate.clone().add(i, 'days');
+            const isHoliday = (
+                await this.holidayService.getHolidays(date)
+            ).includes(date.date());
+            this._selectedWeek.push({
+                date: date,
+                isHoliday: isHoliday,
+            });
+        }
     }
 
     moveMonth(direction: number) {
@@ -178,4 +216,36 @@ export class CalendarComponent {
         return '전체';
     }
     private _type: 'flat-table' | 'food' | 'pension' | 'all' = 'flat-table';
+
+    private _checkTouch() {
+        let startY: any;
+
+        document.addEventListener('touchstart', (e) => {
+            // 터치 시작 지점 저장
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            // 터치 종료 지점 저장
+            let endY = e.changedTouches[0].clientY;
+
+            // 상단에서 하단으로 스크롤 감지
+            if (startY - endY > 40) {
+                console.log('캘린더 축소', startY, endY, window.scrollY);
+                if (window.scrollY > 0) {
+                    if (this.calendarExpandLevel !== 1) {
+                        this.calendarExpandLevel--;
+                    }
+                }
+                // 여기에 실행하고자 하는 동작을 추가하세요.
+            } else if (startY - endY < -40) {
+                console.log('캘린더 확장', startY, endY, window.scrollY);
+                if (window.scrollY === 0) {
+                    if (this.calendarExpandLevel < 3) {
+                        this.calendarExpandLevel++;
+                    }
+                }
+            }
+        });
+    }
 }
