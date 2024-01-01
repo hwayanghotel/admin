@@ -22,7 +22,7 @@
 
     <div class="calender-container">
         <div class="weekday" *ngFor="let weekday of calendar">
-            <div class="date-container" *ngFor="let date of weekday" matRipple (click)="clickDate(date)" [class.dim]="needToDimming(date)">
+            <div class="date-container" *ngFor="let date of weekday" matRipple (click)="changeDate(date)" [class.dim]="needToDimming(date)">
                 <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)">{{date.date.format("D")}}</p>
                 <div class="date-short-content" *ngIf="calendarExpandLevel===3">
                     <div *ngIf="['전체','평상'].includes(type)" class="flat-table">
@@ -42,88 +42,4 @@
     </div>
 </div>
 
-
-<div #ListContainer>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-    <p>하이하이</p>
-</div>
+<guest-list #ListContainer></guest-list>

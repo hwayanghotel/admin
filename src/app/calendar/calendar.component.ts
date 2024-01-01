@@ -5,6 +5,10 @@ import { ManagerService } from '../manager.service';
 import { Subscription, debounceTime } from 'rxjs';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
 
+interface Guest extends CustomerInfo {
+    checked: boolean;
+}
+
 interface ICalendar {
     date: moment.Moment;
     isHoliday?: boolean;
@@ -31,6 +35,7 @@ export class CalendarComponent {
     ) {
         this._setCalendar();
         this._setSelectedWeek();
+        this._checkTouch();
 
         this._subscription.push(
             this.managerService.customerDB$
@@ -39,8 +44,6 @@ export class CalendarComponent {
                     this._db = db;
                 })
         );
-
-        this._checkTouch();
     }
 
     private async _setCalendar() {
@@ -71,27 +74,6 @@ export class CalendarComponent {
         this._calendar = calendar;
     }
 
-    get calendar(): ICalendar[][] {
-        if (this.calendarExpandLevel > 1) {
-            return this._calendar;
-        }
-        return [this._selectedWeek];
-    }
-
-    clickDate(date?: ICalendar) {
-        const previous = this.selectedDate.clone();
-
-        if (date) {
-            this.selectedDate = date.date;
-        } else {
-            this.selectedDate = moment();
-        }
-        if (previous.month() !== this.selectedDate.month()) {
-            this._setCalendar();
-        }
-        this._setSelectedWeek();
-    }
-
     private async _setSelectedWeek() {
         if (
             this._selectedWeek.length === 7 &&
@@ -119,6 +101,94 @@ export class CalendarComponent {
                 isHoliday: isHoliday,
             });
         }
+    }
+
+    private _checkTouch() {
+        let startY: any;
+        let startX: any;
+
+        document.addEventListener('touchstart', (e) => {
+            // 터치 시작 지점 저장
+            startY = e.touches[0].clientY;
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            // 터치 종료 지점 저장
+            let endY = e.changedTouches[0].clientY;
+            let endX = e.changedTouches[0].clientX;
+
+            // 상단에서 하단으로 스크롤 감지
+            if (startY - endY > 40) {
+                // console.log('캘린더 축소', startY, endY, window.scrollY);
+                if (window.scrollY > 0) {
+                    if (this.calendarExpandLevel !== 1) {
+                        this.calendarExpandLevel--;
+                        this._updateListConatinerHeight();
+                    }
+                }
+                // 여기에 실행하고자 하는 동작을 추가하세요.
+            } else if (startY - endY < -40) {
+                // console.log('캘린더 확장', startY, endY, window.scrollY);
+                if (window.scrollY === 0) {
+                    if (this.calendarExpandLevel < 3) {
+                        this.calendarExpandLevel++;
+                        if (this.ListContainer) {
+                            setTimeout(() => {
+                                this.ListContainer.nativeElement.style.paddingTop = `${this.Calendar.nativeElement.offsetHeight}px`;
+                                this.ListContainer.nativeElement.style.minHeight = `calc(100% - ${this.Calendar.nativeElement.offsetHeight}px + 1px)`;
+                            }, 100);
+                        }
+                    }
+                }
+            } else if (startX - endX > 20) {
+                if (this.calendarExpandLevel === 3) {
+                    this.moveMonthOrWeek(1);
+                } else {
+                    this.changeDate({
+                        date: this.selectedDate.clone().add(1, 'days'),
+                    });
+                }
+            } else if (startX - endX < -20) {
+                if (this.calendarExpandLevel === 3) {
+                    this.moveMonthOrWeek(1);
+                } else {
+                    this.changeDate({
+                        date: this.selectedDate.clone().add(-1, 'days'),
+                    });
+                }
+            }
+        });
+    }
+
+    private _updateListConatinerHeight() {
+        if (this.ListContainer) {
+            setTimeout(() => {
+                this.ListContainer.nativeElement.style.paddingTop = `${this.Calendar.nativeElement.offsetHeight}px`;
+                this.ListContainer.nativeElement.style.minHeight = `calc(100% - ${this.Calendar.nativeElement.offsetHeight}px + 1px)`;
+            }, 100);
+        }
+    }
+
+    get calendar(): ICalendar[][] {
+        if (this.calendarExpandLevel > 1) {
+            return this._calendar;
+        }
+        return [this._selectedWeek];
+    }
+
+    changeDate(date?: ICalendar) {
+        const previous = this.selectedDate.clone();
+
+        if (date) {
+            this.selectedDate = date.date;
+        } else {
+            this.selectedDate = moment();
+        }
+        if (previous.month() !== this.selectedDate.month()) {
+            this._setCalendar();
+        }
+        this._setSelectedWeek();
     }
 
     async moveMonthOrWeek(direction: number) {
@@ -245,53 +315,4 @@ export class CalendarComponent {
         return '전체';
     }
     private _type: 'flat-table' | 'food' | 'pension' | 'all' = 'flat-table';
-
-    private _checkTouch() {
-        let startY: any;
-        let startX: any;
-
-        document.addEventListener('touchstart', (e) => {
-            // 터치 시작 지점 저장
-            startY = e.touches[0].clientY;
-            startX = e.touches[0].clientX;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            // 터치 종료 지점 저장
-            let endY = e.changedTouches[0].clientY;
-            let endX = e.changedTouches[0].clientX;
-
-            // 상단에서 하단으로 스크롤 감지
-            if (startY - endY > 40) {
-                // console.log('캘린더 축소', startY, endY, window.scrollY);
-                if (window.scrollY > 0) {
-                    if (this.calendarExpandLevel !== 1) {
-                        this.calendarExpandLevel--;
-                        if (this.ListContainer) {
-                            setTimeout(() => {
-                                this.ListContainer.nativeElement.style.paddingTop = `${this.Calendar.nativeElement.offsetHeight}px`;
-                            }, 100);
-                        }
-                    }
-                }
-                // 여기에 실행하고자 하는 동작을 추가하세요.
-            } else if (startY - endY < -40) {
-                // console.log('캘린더 확장', startY, endY, window.scrollY);
-                if (window.scrollY === 0) {
-                    if (this.calendarExpandLevel < 3) {
-                        this.calendarExpandLevel++;
-                        if (this.ListContainer) {
-                            setTimeout(() => {
-                                this.ListContainer.nativeElement.style.paddingTop = `${this.Calendar.nativeElement.offsetHeight}px`;
-                            }, 100);
-                        }
-                    }
-                }
-            } else if (startX - endX > 20) {
-                this.moveMonthOrWeek(1);
-            } else if (startX - endY < 20) {
-                this.moveMonthOrWeek(-1);
-            }
-        });
-    }
 }
