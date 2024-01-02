@@ -37,7 +37,7 @@ export class CalendarComponent implements AfterViewInit {
             this.managerService.customerDB$
                 .pipe(debounceTime(1000))
                 .subscribe((db) => {
-                    this._db = db;
+                    this._db = db.filter((v) => v.status !== 'cancel');
                 })
         );
     }
@@ -316,7 +316,7 @@ export class CalendarComponent implements AfterViewInit {
             this._db.filter(
                 (v) =>
                     v.date.format('YYMMDD') === date.date.format('YYMMDD') &&
-                    v.status === 'ready'
+                    ['ready', 'paymentReady'].includes(v.status)
             ).length > 0
         );
     }
