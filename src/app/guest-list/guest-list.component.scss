@@ -3,6 +3,10 @@
     --background-color: #FAFAFA;
     --flat-table-bar-color: rgb(107, 187, 184);
     --food-bar-color: rgb(77, 117, 146);
+
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
 }
 
 .header {
@@ -32,9 +36,14 @@
 
 .sub-title {
     margin-left: 1rem;
+    margin-top: 1rem;
     margin-bottom: 0.2rem;
     font-weight: 600;
     color: gray;
+}
+
+.sub-title:first-of-type {
+    margin-top: 0;
 }
 
 .list {

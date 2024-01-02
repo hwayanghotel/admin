@@ -109,6 +109,7 @@ export class GuestListComponent implements OnDestroy {
         return this._db.filter(
             (v) =>
                 ['ready', 'paymentReady'].includes(v.status) &&
+                this.selectedDate &&
                 v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
         );
     }
@@ -118,6 +119,7 @@ export class GuestListComponent implements OnDestroy {
             (v) =>
                 v.status === 'bookingComplete' &&
                 (v.flatTable > 0 || v.dechTable > 0) &&
+                this.selectedDate &&
                 v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
         );
     }
@@ -132,6 +134,7 @@ export class GuestListComponent implements OnDestroy {
                     v.baeksuk > 0 ||
                     v.mushroomStew > 0 ||
                     v.mushroomStewForTwoPeople > 0) &&
+                this.selectedDate &&
                 v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
         );
     }
@@ -140,8 +143,23 @@ export class GuestListComponent implements OnDestroy {
         return this._db.filter(
             (v) =>
                 v.status === 'cancel' &&
+                this.selectedDate &&
                 v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
         );
+    }
+
+    getItemBarColor(user: Guest): string {
+        if (['ready', 'paymentReady'].includes(user.status)) return 'ready';
+        if (user.status === 'cancel') return 'cancel';
+        if (user.flatTable || user.dechTable) return 'flat-table';
+        if (
+            user.neungiBaeksuk ||
+            user.baeksuk ||
+            user.mushroomStew ||
+            user.mushroomStewForTwoPeople
+        )
+            return 'food';
+        return '';
     }
 
     touchStart(user: Guest) {

@@ -131,6 +131,43 @@
     </div>
 </div>
 
+<!-- <p class="sub-title" *ngIf="db.length">검색 리스트</p> -->
+<div class="list" *ngIf="db.length">
+    <div class="list-item" *ngFor="let user of db" mat-ripple
+         (click)="showCheckbox? user.checked = !user.checked : showDetailUser(user)"
+         (touchstart)="touchStart(user)" (touchend)="touchEnd()">
+        <div class="checkbox" *ngIf="showCheckbox">
+            <mat-checkbox [(ngModel)]="user.checked" (click)="$event.stopPropagation()"></mat-checkbox>
+        </div>
+        <div class="prefix" matRipple (click)="$event.stopPropagation()" [matMenuTriggerFor]="statusMenu" [matMenuTriggerData]="{user: user}">
+            <p>{{user.date.format("MM/DD")}}</p>
+            <p *ngIf="user.flatTable || user.dechTable">평상</p>
+            <p *ngIf="!user.flatTable && !user.dechTable">식사</p>
+        </div>
+        <div class="content">
+            <p class="content-title"
+               [class.ready]="getItemBarColor(user) === 'ready'"
+               [class.cancel]="getItemBarColor(user) === 'cancel'"
+               [class.flat-table]="getItemBarColor(user) === 'flat-table'"
+               [class.food]="getItemBarColor(user) === 'food'">
+                {{user.name}}
+                ({{user.person + user.kids}}명)</p>
+            <div class="content-desc">
+                <p>
+                    <span *ngIf="user.flatTable">평상{{user.flatTable}}, </span>
+                    <span *ngIf="user.dechTable">데크{{user.dechTable}}, </span>
+                </p>
+                <p>
+                    <span *ngIf="user.neungiBaeksuk">능이{{user.neungiBaeksuk}}, </span>
+                    <span *ngIf="user.baeksuk">한방{{user.baeksuk}}, </span>
+                    <span *ngIf="user.mushroomStew">버섯{{user.mushroomStew}}, </span>
+                    <span *ngIf="user.mushroomStewForTwoPeople">버섯小{{user.mushroomStewForTwoPeople}}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <mat-menu #statusMenu="matMenu">
     <ng-template matMenuContent let-user="user">
         <button mat-menu-item *ngIf="user.status !=='bookingComplete'" (click)="setStatus(user, 'bookingComplete')">예약</button>
