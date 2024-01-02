@@ -119,7 +119,7 @@ export class GuestListComponent implements OnDestroy {
     get readyList(): Guest[] {
         return this._db.filter(
             (v) =>
-                v.status === 'ready' &&
+                ['ready', 'paymentReady'].includes(v.status) &&
                 v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
         );
     }
@@ -127,8 +127,30 @@ export class GuestListComponent implements OnDestroy {
     get flatTableList(): Guest[] {
         return this._db.filter(
             (v) =>
-                v.status !== 'ready' &&
+                v.status === 'bookingComplete' &&
                 (v.flatTable > 0 || v.dechTable > 0) &&
+                v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
+        );
+    }
+
+    get foodList(): Guest[] {
+        return this._db.filter(
+            (v) =>
+                v.status === 'bookingComplete' &&
+                v.flatTable === 0 &&
+                v.dechTable === 0 &&
+                (v.neungiBaeksuk > 0 ||
+                    v.baeksuk > 0 ||
+                    v.mushroomStew > 0 ||
+                    v.mushroomStewForTwoPeople > 0) &&
+                v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
+        );
+    }
+
+    get cancelList(): Guest[] {
+        return this._db.filter(
+            (v) =>
+                v.status === 'cancel' &&
                 v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
         );
     }

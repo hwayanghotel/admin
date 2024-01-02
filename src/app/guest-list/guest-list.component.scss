@@ -1,6 +1,8 @@
 :host {
     --border-color: rgba(0, 0, 0, 0.1);
     --background-color: #FAFAFA;
+    --flat-table-bar-color: rgb(107, 187, 184);
+    --food-bar-color: rgb(77, 117, 146);
 }
 
 .header {
@@ -45,12 +47,29 @@
 
         .prefix {
             padding-right: 1rem;
+            flex: none;
         }
 
         .content {
             .content-title {
                 padding-left: 0.5rem;
-                border-left: 0.2rem solid red;
+
+                &.ready {
+                    border-left: 0.2rem solid red;
+                }
+
+                &.flat-table {
+                    border-left: 0.2rem solid var(--flat-table-bar-color);
+
+                }
+
+                &.food {
+                    border-left: 0.2rem solid var(--food-bar-color);
+                }
+
+                &.cancel {
+                    border-left: 0.2rem solid gray;
+                }
             }
 
             .content-desc {
