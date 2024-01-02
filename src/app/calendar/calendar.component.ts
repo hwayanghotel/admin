@@ -21,6 +21,7 @@ export class CalendarComponent implements AfterViewInit {
     calendarExpandLevel: number = 3; //1,2,3
     today = moment();
     selectedDate: moment.Moment = moment();
+    listType: 'list' | 'timeline' = 'list';
     private _selectedWeek: ICalendar[] = [];
     private _calendar: ICalendar[][] = [];
     private _db: CustomerInfo[] = [];

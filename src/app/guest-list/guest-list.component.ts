@@ -98,17 +98,6 @@ export class GuestListComponent implements OnDestroy {
         console.warn('showDetailUser', user.name);
     }
 
-    type(user: Guest): '평상' | '식사' {
-        return user.flatTable > 0 || user.dechTable > 0 ? '평상' : '식사';
-    }
-
-    status(user: Guest): '대기' | '입금전' | '예약' | '취소' {
-        if (user.status === 'paymentReady') return '입금전';
-        if (user.status === 'bookingComplete') return '예약';
-        if (user.status === 'cancel') return '취소';
-        return '대기';
-    }
-
     setStatus(
         user: Guest,
         status: 'ready' | 'paymentReady' | 'bookingComplete' | 'cancel'

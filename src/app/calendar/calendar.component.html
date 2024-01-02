@@ -47,5 +47,10 @@
 </div>
 
 <div #ListContainer class="list-container">
-    <guest-list [selectedDate]="selectedDate"></guest-list>
+    <div class="list-header">
+        <p>{{selectedDate.format("YY년 M월 D일")}}</p>
+        <mat-icon *ngIf="listType==='list'" (click)="listType = 'timeline'">list</mat-icon>
+        <mat-icon *ngIf="listType==='timeline'" (click)="listType = 'list'">access_time</mat-icon>
+    </div>
+    <guest-list [class.hide]="listType==='timeline'" [selectedDate]="selectedDate"></guest-list>
 </div>

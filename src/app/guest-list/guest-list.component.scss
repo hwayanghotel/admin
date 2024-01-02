@@ -9,7 +9,6 @@
     background-color: var(--background-color);
     position: fixed;
     top: 0;
-    margin: 0.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,6 +18,10 @@
     .header-prefix {
         display: flex;
         align-items: center;
+
+        mat-checkbox {
+            margin: 0;
+        }
     }
 
     mat-icon {
@@ -29,7 +32,6 @@
 
 .sub-title {
     margin-left: 1rem;
-    margin-top: 1rem;
     margin-bottom: 0.2rem;
     font-weight: 600;
     color: gray;

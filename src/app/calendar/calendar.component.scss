@@ -217,4 +217,25 @@ mat-icon {
 .list-container {
     background-color: var(--background-color);
     min-height: 101%;
+
+    .list-header {
+        padding: 0 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        p {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: gray;
+        }
+
+        mat-icon {
+            color: gray;
+        }
+    }
+}
+
+.hide {
+    display: none;
 }
