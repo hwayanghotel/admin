@@ -5,6 +5,7 @@ import {
     Input,
     OnDestroy,
     OnInit,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
@@ -12,6 +13,7 @@ import { ManagerService } from '../manager.service';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 interface Guest extends CustomerInfo {
     checked: boolean;
@@ -24,6 +26,7 @@ interface Guest extends CustomerInfo {
 })
 export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('Input', { static: false }) Input: ElementRef;
+    @ViewChild('SelectMsg') SelectMsg: TemplateRef<any>;
     @Input() selectedDate: moment.Moment;
     @Input() searchInput: string;
     isSearch: boolean;
@@ -39,7 +42,8 @@ export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private managerService: ManagerService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private dialog: MatBottomSheet
     ) {
         this._subscription.push(
             this.managerService.customerDB$
@@ -204,6 +208,10 @@ export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
     private _timeout: any;
+
+    openBottomBarDialog() {
+        this.dialog.open(this.SelectMsg);
+    }
 
     onBackButton() {
         window.history.back();

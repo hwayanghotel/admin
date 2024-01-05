@@ -52,7 +52,7 @@ const modules = [
     // MatNativeDateModule,
 
     // MatCardModule,
-    // MatBottomSheetModule,
+    MatBottomSheetModule,
 ];
 
 @NgModule({
