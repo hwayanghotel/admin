@@ -3,13 +3,20 @@
     --background-color: #FAFAFA;
     --flat-table-bar-color: rgb(107, 187, 184);
     --food-bar-color: rgb(77, 117, 146);
+    --header-height: 3rem;
 
     display: flex;
     flex-direction: column;
     background-color: var(--background-color);
 }
 
+.search-header-container {
+    height: var(--header-height);
+}
+
 .header {
+    height: var(--header-height);
+    width: 100%;
     background-color: var(--background-color);
     position: fixed;
     top: 0;
@@ -28,18 +35,36 @@
         }
     }
 
-    mat-icon {
-        padding: 0.3rem;
-        border-radius: 50%;
+    .header-content {
+        flex-grow: 1;
+
+        input {
+            width: 100%;
+            outline: none;
+            border: none;
+            background-color: var(--background-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+    }
+
+    .header-suffix {
+        display: flex;
+        align-items: center;
     }
 }
 
 .sub-title {
-    margin-left: 1rem;
-    margin-top: 1rem;
-    margin-bottom: 0.2rem;
-    font-weight: 600;
-    color: gray;
+    padding: 0 0.5rem 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 2rem;
+
+    p {
+        font-weight: 600;
+        color: gray;
+    }
 }
 
 .sub-title:first-of-type {
@@ -113,6 +138,11 @@ p {
     font-size: 0.9rem;
 }
 
+mat-icon {
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
 ::ng-deep .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background,
 .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background,
 .mdc-checkbox .mdc-checkbox__native-control[data-indeterminate=true]:enabled~.mdc-checkbox__background {
@@ -128,3 +158,25 @@ mat-checkbox {
     margin-left: -0.5rem;
     margin-top: -8px;
 }
+
+
+// /* 커서 깜빡임 애니메이션 */
+// @keyframes cursorBlink {
+//     0% {
+//         opacity: 1;
+//     }
+
+//     50% {
+//         opacity: 0;
+//     }
+
+//     100% {
+//         opacity: 1;
+//     }
+// }
+
+// /* 커서 깜빡임 속성 */
+// .cursor-blink {
+//     display: inline-block;
+//     animation: cursorBlink 1s step-end infinite;
+// }

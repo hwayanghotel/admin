@@ -2,7 +2,7 @@
     <div class="top-header">
         <mat-icon matRipple>menu</mat-icon>
         <div class="suffix">
-            <mat-icon matRipple>search</mat-icon>
+            <mat-icon matRipple routerLink="/guest-list" [queryParams]="{isSearch: true}">search</mat-icon>
             <div class="today-button" matRipple>
                 <p (click)="moveToday()">{{today.format("D")}}</p>
             </div>

@@ -1,8 +1,16 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    Input,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
 import { ManagerService } from '../manager.service';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 
 interface Guest extends CustomerInfo {
@@ -14,15 +22,24 @@ interface Guest extends CustomerInfo {
     templateUrl: './guest-list.component.html',
     styleUrls: ['./guest-list.component.scss'],
 })
-export class GuestListComponent implements OnDestroy {
+export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild('Input', { static: false }) Input: ElementRef;
     @Input() selectedDate: moment.Moment;
     @Input() searchInput: string;
+    isSearch: boolean;
+    expandStatus = {
+        readyList: true,
+        flatTableList: true,
+        foodList: true,
+        cancelList: true,
+    };
     private _db: Guest[] = [];
     private _subscription: Subscription[] = [];
 
     constructor(
         private managerService: ManagerService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this._subscription.push(
             this.managerService.customerDB$
@@ -33,6 +50,22 @@ export class GuestListComponent implements OnDestroy {
                         .sort((a, b) => this._sortList(a, b));
                 })
         );
+    }
+
+    ngOnInit(): void {
+        this.route.queryParams.subscribe((data) => {
+            this.isSearch = data['isSearch'];
+        });
+    }
+
+    ngAfterViewInit(): void {
+        this.focusInput();
+    }
+
+    focusInput() {
+        if (this.isSearch) {
+            this.Input.nativeElement.focus();
+        }
     }
 
     get showCheckbox(): boolean {
@@ -57,6 +90,26 @@ export class GuestListComponent implements OnDestroy {
 
     get totalCheckedNumber(): number {
         return this.db.filter((user) => user.checked).length;
+    }
+
+    deleteGuests() {
+        this.db
+            .filter((user) => user.checked)
+            .forEach((user) => {
+                this.managerService.delete(user.id);
+            });
+    }
+
+    showDetailUser(user: Guest) {
+        this.router.navigate(['/guest-detail'], { queryParams: user });
+        console.warn('showDetailUser', user.name);
+    }
+
+    setStatus(
+        user: Guest,
+        status: 'ready' | 'paymentReady' | 'bookingComplete' | 'cancel'
+    ) {
+        this.managerService.update({ ...user, status: status });
     }
 
     get db(): Guest[] {
@@ -85,47 +138,22 @@ export class GuestListComponent implements OnDestroy {
         return db;
     }
 
-    deleteGuests() {
-        this.db
-            .filter((user) => user.checked)
-            .forEach((user) => {
-                this.managerService.delete(user.id);
-            });
-    }
-
-    showDetailUser(user: Guest) {
-        this.router.navigate(['/guest-detail'], { queryParams: user });
-        console.warn('showDetailUser', user.name);
-    }
-
-    setStatus(
-        user: Guest,
-        status: 'ready' | 'paymentReady' | 'bookingComplete' | 'cancel'
-    ) {
-        this.managerService.update({ ...user, status: status });
-    }
-
     get readyList(): Guest[] {
-        return this._db.filter(
-            (v) =>
-                ['ready', 'paymentReady'].includes(v.status) &&
-                this.selectedDate &&
-                v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
+        return this.db.filter((v) =>
+            ['ready', 'paymentReady'].includes(v.status)
         );
     }
 
     get flatTableList(): Guest[] {
-        return this._db.filter(
+        return this.db.filter(
             (v) =>
                 v.status === 'bookingComplete' &&
-                (v.flatTable > 0 || v.dechTable > 0) &&
-                this.selectedDate &&
-                v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
+                (v.flatTable > 0 || v.dechTable > 0)
         );
     }
 
     get foodList(): Guest[] {
-        return this._db.filter(
+        return this.db.filter(
             (v) =>
                 v.status === 'bookingComplete' &&
                 v.flatTable === 0 &&
@@ -133,19 +161,12 @@ export class GuestListComponent implements OnDestroy {
                 (v.neungiBaeksuk > 0 ||
                     v.baeksuk > 0 ||
                     v.mushroomStew > 0 ||
-                    v.mushroomStewForTwoPeople > 0) &&
-                this.selectedDate &&
-                v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
+                    v.mushroomStewForTwoPeople > 0)
         );
     }
 
     get cancelList(): Guest[] {
-        return this._db.filter(
-            (v) =>
-                v.status === 'cancel' &&
-                this.selectedDate &&
-                v.date.format('YYMMDD') === this.selectedDate.format('YYMMDD')
-        );
+        return this.db.filter((v) => v.status === 'cancel');
     }
 
     getItemBarColor(user: Guest): string {
@@ -183,6 +204,10 @@ export class GuestListComponent implements OnDestroy {
         }
     }
     private _timeout: any;
+
+    onBackButton() {
+        window.history.back();
+    }
 
     ngOnDestroy(): void {
         for (let sub of this._subscription) {
