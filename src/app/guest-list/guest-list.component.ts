@@ -15,6 +15,7 @@ import { CustomerInfo } from 'reservation/booking/booking.component.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MediatorService } from 'reservation/service/mediator/mediator.service';
 
 export interface Guest extends CustomerInfo {
     checked: boolean;
@@ -45,7 +46,8 @@ export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
         private SMSService: SMSService,
         private router: Router,
         private route: ActivatedRoute,
-        private dialog: MatBottomSheet
+        private dialog: MatBottomSheet,
+        private mediatorServicer: MediatorService
     ) {
         this._subscription.push(
             this.managerService.customerDB$
@@ -107,8 +109,9 @@ export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     showDetailUser(user: Guest) {
-        this.router.navigate(['/guest-detail'], { queryParams: user });
-        console.warn('showDetailUser', user.name);
+        this.mediatorServicer.customerInfo = user;
+        this.router.navigate(['/guest-detail']);
+        console.log('showDetailUser', user.name);
     }
 
     setStatus(

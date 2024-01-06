@@ -1,18 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
 import * as Moment from 'moment';
+import 'moment/locale/ko';
 import {
     Price,
     STANDARD_BOOKING,
 } from 'reservation/service/booking/booking.service.interface';
+import { MediatorService } from 'reservation/service/mediator/mediator.service';
+import { SMSService } from '../sms.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { BookingService } from 'reservation/service/booking/booking.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-guest-detail',
     templateUrl: './guest-detail.component.html',
     styleUrls: ['./guest-detail.component.scss'],
 })
-export class GuestDetailComponent implements OnInit {
+export class GuestDetailComponent {
+    @ViewChild('SelectMsg') SelectMsg: TemplateRef<any>;
     customerInfo: CustomerInfo = {
         id: Moment().format('YYMMDDHHmmss'),
         name: '',
@@ -31,37 +38,71 @@ export class GuestDetailComponent implements OnInit {
         date: Moment().add('days', 1).hour(12).minutes(0),
     };
     memo: string = '';
+    editMode: boolean;
+    flatTableEditMode: boolean;
+    foodEditMode: boolean;
 
-    constructor(private route: ActivatedRoute) {}
-
-    ngOnInit() {
-        this.route.queryParams.subscribe((customerInfo) => {
-            if (customerInfo['id']) {
-                this.customerInfo = {
-                    ...(customerInfo as CustomerInfo),
-                    baeksuk: Number(customerInfo['baeksuk']),
-                    neungiBaeksuk: Number(customerInfo['neungiBaeksuk']),
-                    mushroomStew: Number(customerInfo['mushroomStew']),
-                    mushroomStewForTwoPeople: Number(
-                        customerInfo['mushroomStewForTwoPeople']
-                    ),
-                    flatTable: Number(customerInfo['flatTable']),
-                    dechTable: Number(customerInfo['dechTable']),
-                    person: Number(customerInfo['person']),
-                    kids: Number(customerInfo['kids']),
-                    date: Moment(new Date(customerInfo['date'])),
-                };
-                this.memo = this.customerInfo.customerMemo;
-            }
-        });
+    constructor(
+        private dialog: MatBottomSheet,
+        private router: Router,
+        private mediatorService: MediatorService,
+        private bookingService: BookingService,
+        private SMSService: SMSService,
+        private snackBar: MatSnackBar
+    ) {
+        this.customerInfo = this.mediatorService.customerInfo;
         this.memo = this.customerInfo.customerMemo;
+        if (!this.customerInfo.deposit) {
+            this.customerInfo.deposit = this.recommendDeposit;
+        }
     }
 
-    get status(): '대기' | '입금전' | '예약' | '취소' {
-        if (this.customerInfo.status === 'paymentReady') return '입금전';
-        if (this.customerInfo.status === 'bookingComplete') return '예약';
-        if (this.customerInfo.status === 'cancel') return '취소';
+    getStatus(status: string): '대기' | '입금전' | '예약' | '취소' {
+        if (status === 'paymentReady') return '입금전';
+        if (status === 'bookingComplete') return '예약';
+        if (status === 'cancel') return '취소';
         return '대기';
+    }
+
+    setStatus(status: string) {
+        this.customerInfo.status = status as any;
+    }
+
+    get tel(): string {
+        return this.customerInfo.tel;
+    }
+
+    set tel(v: string) {
+        if (v.length > 14) v = v.substring(0, 13);
+        let input: string = v;
+        if (this.customerInfo.tel.length < input.length && input.length === 8) {
+            input += '-';
+        }
+        this.customerInfo.tel = input;
+    }
+
+    get date(): string {
+        return this.customerInfo.date.format('YYYY-MM-DD');
+    }
+
+    set date(value: string) {
+        if (value) {
+            const [year, month, date] = value.split('-');
+            this.customerInfo.date.year(Number(year));
+            this.customerInfo.date.month(Number(month));
+            this.customerInfo.date.date(Number(date));
+        }
+    }
+
+    get time(): string {
+        return this.customerInfo.date.format('HH:mm');
+    }
+    set time(value: string) {
+        if (value) {
+            const [hour, minute] = value.split(':');
+            this.customerInfo.date.hour(Number(hour));
+            this.customerInfo.date.minute(Number(minute));
+        }
     }
 
     get bookingFlatTable(): string {
@@ -122,7 +163,7 @@ export class GuestDetailComponent implements OnInit {
         return description;
     }
 
-    get cost(): number {
+    get recommendDeposit(): number {
         const flat = this.customerInfo.flatTable;
         const dech = this.customerInfo.dechTable;
         const guests = this.customerInfo.person + this.customerInfo.kids;
@@ -135,6 +176,36 @@ export class GuestDetailComponent implements OnInit {
                 ? additionalGuests * Price['평상추가인원']
                 : 0)
         );
+    }
+
+    moveBookingParkingPage() {
+        this.mediatorService.customerInfo = this.customerInfo;
+        this.router.navigate(['/booking-parking']);
+    }
+
+    openBottomBarDialog() {
+        this.dialog.open(this.SelectMsg);
+    }
+
+    getSMSText(
+        type?: 'BeforeVisit' | 'Account' | 'Confirm' | 'BookingInfo'
+    ): string {
+        return this.SMSService.getSMSText(this.customerInfo, type);
+    }
+
+    onBookingCancelButton() {
+        this.bookingService
+            .cancel(this.customerInfo)
+            .then((user) => {
+                this.customerInfo = user;
+            })
+            .catch((e) =>
+                this.snackBar.open(
+                    '예약이 취소되지 않았습니다. 다시 시도해주세요.',
+                    null,
+                    { duration: 2000 }
+                )
+            );
     }
 
     onBackButton() {

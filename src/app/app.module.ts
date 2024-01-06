@@ -18,6 +18,8 @@ import { CalendarV1Component } from './calendar-v1/calendar-v1.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarComponent } from './calendar/calendar.component';
 import { SMSService } from './sms.service';
+import { BookingParkingComponent } from 'reservation/booking/booking-parking/booking-parking.component';
+import { MediatorService } from 'reservation/service/mediator/mediator.service';
 
 @NgModule({
     declarations: [
@@ -28,6 +30,7 @@ import { SMSService } from './sms.service';
         GuestDetailComponent,
         CalendarV1Component,
         CalendarComponent,
+        BookingParkingComponent,
     ],
     imports: [
         BrowserModule,
@@ -39,7 +42,7 @@ import { SMSService } from './sms.service';
         AngularFireAuthModule,
         HttpClientModule,
     ],
-    providers: [HolidayService, ManagerService, SMSService],
+    providers: [HolidayService, ManagerService, SMSService, MediatorService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
