@@ -179,10 +179,11 @@
 
 <ng-template #SelectMsg>
     <div class="select-msg">
-        <h2>문자 보내기</h2>
-        <button mat-menu-item><mat-icon>mail_outline</mat-icon>입금 계좌 알려주기</button>
-        <button mat-menu-item><mat-icon>mail_outline</mat-icon>예약 완료 안내하기</button>
-        <button mat-menu-item><mat-icon>mail_outline</mat-icon>주차 등록 요청하기</button>
-        <button mat-menu-item><mat-icon>mail_outline</mat-icon>문자 보내기</button>
+        <h2>여러명에게 문자 보내기</h2>
+        <button mat-menu-item (click)="sendGroupSMS('BeforeVisit')"><mat-icon>mail_outline</mat-icon>방문 직전 주차 등록 안내하기</button>
+        <button mat-menu-item (click)="sendGroupSMS('Account')"><mat-icon>mail_outline</mat-icon>입금 계좌 알려주기</button>
+        <button mat-menu-item (click)="sendGroupSMS('Confirm')"><mat-icon>mail_outline</mat-icon>예약 완료 알려주기</button>
+        <button mat-menu-item (click)="sendGroupSMS('BookingInfo')"><mat-icon>mail_outline</mat-icon>예약 안내 보내기</button>
+        <button mat-menu-item (click)="sendGroupSMS()"><mat-icon>mail_outline</mat-icon>직접 문자 작성하기</button>
     </div>
 </ng-template>

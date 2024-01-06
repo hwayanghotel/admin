@@ -10,12 +10,13 @@ import {
 } from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
 import { ManagerService } from '../manager.service';
+import { SMSService } from '../sms.service';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
-interface Guest extends CustomerInfo {
+export interface Guest extends CustomerInfo {
     checked: boolean;
 }
 
@@ -41,6 +42,7 @@ export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     constructor(
         private managerService: ManagerService,
+        private SMSService: SMSService,
         private router: Router,
         private route: ActivatedRoute,
         private dialog: MatBottomSheet
@@ -211,6 +213,13 @@ export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     openBottomBarDialog() {
         this.dialog.open(this.SelectMsg);
+    }
+
+    sendGroupSMS(type?: 'BeforeVisit' | 'Account' | 'Confirm' | 'BookingInfo') {
+        this.SMSService.sendGroupSMS(
+            this.db.filter((user) => user.checked),
+            type
+        );
     }
 
     onBackButton() {
