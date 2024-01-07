@@ -64,6 +64,14 @@
         <p>- 데크</p>
         <input type="number" placeholder="1대" [(ngModel)]="customerInfo.dechTable">
     </div>
+    <div class="answer-box" *ngIf="bookingFlatTable">
+        <p>평상 예약금</p>
+        <input type="number" placeholder="50,000" [(ngModel)]="customerInfo.deposit">
+    </div>
+    <div class="answer-box" *ngIf="bookingFlatTable">
+        <p>(※ 추천 예약금)</p>
+        <p>({{recommendDeposit | number}}원)</p>
+    </div>
     <div class="answer-box" (click)="foodEditMode = !foodEditMode">
         <p>식사 예약</p>
         <p class="answer" [innerHTML]="bookingFoods"></p>
@@ -88,14 +96,6 @@
         <p>차량등록</p>
         <p (click)="moveBookingParkingPage()">{{customerInfo.cars.length}}대<br>{{carList}}
         </p>
-    </div>
-    <div class="answer-box" *ngIf="bookingFlatTable">
-        <p>평상 예약금</p>
-        <input type="number" placeholder="50,000" [(ngModel)]="customerInfo.deposit">
-    </div>
-    <div class="answer-box" *ngIf="bookingFlatTable">
-        <p>(※ 추천 예약금)</p>
-        <p>({{recommendDeposit | number}}원)</p>
     </div>
     <div class="answer-box memo-box">
         <p>요청 사항</p>
