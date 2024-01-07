@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-    AngularFirestore,
-    QueryDocumentSnapshot,
-} from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
 import { BookingService } from 'reservation/service/booking/booking.service';
 import { BOOKING_COLLECTION } from 'reservation/service/booking/booking.service.interface';
@@ -17,6 +14,7 @@ export interface IManagerService {
     update(bookingInfo: CustomerInfo): Promise<CustomerInfo>;
     delete(id: string): Promise<string>;
     customerDB$: BehaviorSubject<CustomerInfo[]>;
+    checkPermission(password: string): Promise<boolean>;
 }
 
 @Injectable({
@@ -33,12 +31,29 @@ export class ManagerService implements IManagerService {
         private bookingService: BookingService,
         private snackBar: MatSnackBar
     ) {
-        //패스워드 통과하면 sub걸어야 함.
-        this._subscribeUserDB();
         this.customerDB$.pipe(debounceTime(1000)).subscribe((v) => {
             console.warn('DB', v);
         });
     }
+
+    checkPermission(password: string): Promise<boolean> {
+        if (this._permission) {
+            return Promise.resolve(true);
+        }
+        return this.store
+            .collection('PERMISSION')
+            .ref.where('PASSWORD', '==', password)
+            .get()
+            .then((snapshot) => {
+                if (snapshot.size === 1) {
+                    this._permission = true;
+                    this._subscribeUserDB();
+                }
+                return snapshot.size === 1;
+            })
+            .catch((e) => false);
+    }
+    private _permission: boolean = false;
 
     private _subscribeUserDB() {
         if (this.customerDB$.getValue().length > 0) return;
@@ -222,18 +237,5 @@ export class ManagerService implements IManagerService {
                     '삭제 과정에서 서버 오류 발생 :' + id + ', ' + e
                 );
             });
-    }
-
-    //예전꺼
-    controlFilter: ReplaySubject<Moment.Moment> =
-        new ReplaySubject<Moment.Moment>();
-    permission: boolean = false;
-    private answer = 828;
-
-    checkPermission(password: number) {
-        if (!this.permission && password === this.answer) {
-            this.permission = true;
-            // this.DBService.subscribeUserDB();
-        }
     }
 }
