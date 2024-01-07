@@ -14,7 +14,7 @@ import { BookingService } from 'reservation/service/booking/booking.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-guest-detail',
+    selector: 'guest-detail',
     templateUrl: './guest-detail.component.html',
     styleUrls: ['./guest-detail.component.scss'],
 })
