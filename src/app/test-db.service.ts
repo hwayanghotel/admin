@@ -20,6 +20,7 @@
 //     private status: any = [
 //         'ready',
 //         'paymentReady',
+//         'confirming',
 //         'bookingComplete',
 //         'cancel',
 //     ];

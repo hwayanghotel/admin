@@ -159,8 +159,9 @@ export class ManagerService implements IManagerService {
         const statusOrder = {
             ready: 0,
             paymentReady: 1,
-            bookingComplete: 2,
-            cancel: 3,
+            confirming: 2,
+            bookingComplete: 3,
+            cancel: 4,
         };
         const statusA = statusOrder[a['status']];
         const statusB = statusOrder[b['status']];
