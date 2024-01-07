@@ -3,7 +3,7 @@ import { ManagerService } from '../manager.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-admin',
+    selector: 'admin',
     templateUrl: './admin.component.html',
     styleUrls: ['./admin.component.scss'],
 })
