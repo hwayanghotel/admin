@@ -116,7 +116,12 @@ export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     setStatus(
         user: Guest,
-        status: 'ready' | 'paymentReady' | 'bookingComplete' | 'cancel'
+        status:
+            | 'ready'
+            | 'paymentReady'
+            | 'confirming'
+            | 'bookingComplete'
+            | 'cancel'
     ) {
         this.managerService.update({ ...user, status: status });
     }
@@ -240,8 +245,9 @@ export class GuestListComponent implements OnInit, AfterViewInit, OnDestroy {
         const statusOrder = {
             paymentReady: 0,
             ready: 1,
-            bookingComplete: 2,
-            cancel: 2, //3에서 바꿈
+            confirming: 2,
+            bookingComplete: 3,
+            cancel: 4, //3에서 바꿈
         };
         const statusA = statusOrder[a['status']];
         const statusB = statusOrder[b['status']];

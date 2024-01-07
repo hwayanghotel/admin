@@ -57,8 +57,9 @@ export class GuestDetailComponent {
         }
     }
 
-    getStatus(status: string): '대기' | '입금전' | '예약' | '취소' {
+    getStatus(status: string): '대기' | '입금전' | '확인중' | '예약' | '취소' {
         if (status === 'paymentReady') return '입금전';
+        if (status === 'confirming') return '확인중';
         if (status === 'bookingComplete') return '예약';
         if (status === 'cancel') return '취소';
         return '대기';

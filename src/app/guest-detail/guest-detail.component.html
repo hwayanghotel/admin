@@ -28,6 +28,7 @@
     <mat-menu #statusMenu="matMenu">
         <button mat-menu-item (click)="setStatus('ready')">{{getStatus('ready')}}</button>
         <button mat-menu-item (click)="setStatus('paymentReady')">{{getStatus('paymentReady')}}</button>
+        <button mat-menu-item (click)="setStatus('confirming')">{{getStatus('confirming')}}</button>
         <button mat-menu-item (click)="setStatus('bookingComplete')">{{getStatus('bookingComplete')}}</button>
         <button mat-menu-item (click)="setStatus('cancel')">{{getStatus('cancel')}}</button>
     </mat-menu>

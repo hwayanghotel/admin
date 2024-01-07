@@ -162,6 +162,7 @@
         <button mat-menu-item *ngIf="user.status !=='cancel'" (click)="setStatus(user, 'cancel')">취소</button>
         <button mat-menu-item *ngIf="user.status !=='ready'" (click)="setStatus(user, 'ready')">대기</button>
         <button mat-menu-item *ngIf="user.status !=='paymentReady'" (click)="setStatus(user, 'paymentReady')">입금전</button>
+        <button mat-menu-item *ngIf="user.status !=='confirming'" (click)="setStatus(user, 'cancel')">확인중</button>
     </ng-template>
 </mat-menu>
 
