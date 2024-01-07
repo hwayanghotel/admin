@@ -1,0 +1,26 @@
+<div class="calender-container">
+	<div class="dateRange" *ngIf="isDateRange">
+		<p mat-ripple (click)="active = 'start'">시작일: {{startDate? startDate.format("MM/DD") : ""}}
+			<mat-icon *ngIf="startDate" matRipple (click)="clearDate('start')">clear</mat-icon>
+		</p>
+		<p mat-ripple (click)="active = 'end'">종료일: {{endDate? endDate.format("MM/DD") : ""}}
+			<mat-icon *ngIf="endDate" matRipple (click)="clearDate('end')">clear</mat-icon>
+		</p>
+	</div>
+	<div class="month-container">
+		<mat-icon matRipple (click)="moveCalendar(-1)">keyboard_arrow_left</mat-icon>
+		<p (click)="calendarExpand = !calendarExpand">{{selectedMonth}}</p>
+		<mat-icon matRipple (click)="moveCalendar(1)">keyboard_arrow_right</mat-icon>
+	</div>
+	<div class="weekdays-list">
+		<p *ngFor="let day of week">{{day}}</p>
+	</div>
+	<div class="weekday" *ngFor="let weekday of calendar">
+		<div class="date" *ngFor="let date of weekday" matRipple [class.selected]="isSelected(date)"
+			 (click)="setSelectedDate(date)" [class.today]="isToday(date)" [class.dim]="isDim(date)">
+			<p [class.holiday]="date.isHoliday && !isSelected(date)">
+				{{showDate(date)}}
+			</p>
+		</div>
+	</div>
+</div>

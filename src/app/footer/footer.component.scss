@@ -1,0 +1,20 @@
+:host {
+    position: fixed;
+    bottom: 0;
+
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    background-color: white;
+}
+
+.category {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: calc(100%/3);
+    padding-top: 1rem;
+}
