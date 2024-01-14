@@ -12,6 +12,7 @@ import { SMSService } from '../sms.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BookingService } from 'reservation/service/booking/booking.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ManagerService } from '../manager.service';
 
 @Component({
     selector: 'guest-detail',
@@ -41,16 +42,24 @@ export class GuestDetailComponent {
     editMode: boolean;
     flatTableEditMode: boolean;
     foodEditMode: boolean;
+    addMode: boolean;
 
     constructor(
         private dialog: MatBottomSheet,
         private router: Router,
         private mediatorService: MediatorService,
+        private managerService: ManagerService,
         private bookingService: BookingService,
         private SMSService: SMSService,
         private snackBar: MatSnackBar
     ) {
-        this.customerInfo = this.mediatorService.customerInfo;
+        if (this.mediatorService.customerInfo) {
+            this.customerInfo = this.mediatorService.customerInfo;
+        } else {
+            this.editMode = true;
+            this.addMode = true;
+        }
+
         this.memo = this.customerInfo.customerMemo;
         if (!this.customerInfo.deposit) {
             this.customerInfo.deposit = this.recommendDeposit;
@@ -207,6 +216,34 @@ export class GuestDetailComponent {
                     { duration: 2000 }
                 )
             );
+    }
+
+    onSaveButton() {
+        if (this.addMode) {
+            this.managerService
+                .add({
+                    ...this.customerInfo,
+                    status:
+                        this.customerInfo.flatTable ||
+                        this.customerInfo.dechTable
+                            ? 'paymentReady'
+                            : 'confirming',
+                    customerMemo: this.memo || null,
+                })
+                .then((user) => {
+                    this.customerInfo = user;
+                })
+                .catch((e) => {
+                    console.error('신규 예약 등록 실패', e);
+                    this.snackBar.open(
+                        '예약을 실패했습니다. 다시 시도해주세요.',
+                        null,
+                        { duration: 2000 }
+                    );
+                });
+        } else {
+            this.managerService.update(this.customerInfo);
+        }
     }
 
     onBackButton() {

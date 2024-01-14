@@ -239,3 +239,12 @@ mat-icon {
 .hide {
     display: none;
 }
+
+.add-button {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 10;
+    background-color: rgba(236, 236, 236, 0.3);
+    color: black;
+}

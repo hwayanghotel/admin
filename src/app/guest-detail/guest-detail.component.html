@@ -21,6 +21,10 @@
         <p>예약번호</p>
         <p>{{customerInfo.id}}</p>
     </div>
+    <div class="answer-box" *ngIf="addMode">
+        <p>성함</p>
+        <input #Input placeholder="홍길동" [(ngModel)]="customerInfo.name">
+    </div>
     <div class="answer-box">
         <p>상태</p>
         <p [matMenuTriggerFor]="statusMenu" matRipple>{{getStatus(customerInfo.status)}}</p>
@@ -119,7 +123,7 @@
             <p>전화하기</p>
         </a>
     </div>
-    <div class="bottom-item" matRipple *ngIf="editMode">
+    <div class="bottom-item" matRipple *ngIf="editMode" (click)="onSaveButton()">
         <mat-icon>save</mat-icon>
         <p>저장하기</p>
     </div>
