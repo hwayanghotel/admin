@@ -152,7 +152,7 @@ export class CalendarComponent implements AfterViewInit {
                 }
             } else if (startX - endX < -20) {
                 if (this.calendarExpandLevel === 3) {
-                    this.moveMonthOrWeek(1);
+                    this.moveMonthOrWeek(-1);
                 } else {
                     this.changeDate({
                         date: this.selectedDate.clone().add(-1, 'days'),
@@ -169,6 +169,10 @@ export class CalendarComponent implements AfterViewInit {
                 this.ListContainer.nativeElement.style.minHeight = `calc(100% - ${this.Calendar.nativeElement.offsetHeight}px + 1px)`;
             }, 100);
         }
+    }
+
+    get disabledNextMonth(): boolean {
+        return this.selectedDate.year() > moment().year();
     }
 
     get calendar(): ICalendar[][] {

@@ -51,12 +51,17 @@ export class ManagerService implements IManagerService {
                 if (snapshot.size === 1) {
                     this._permission = true;
                     this._subscribeUserDB();
+                    //TEST MODE
+                    // this._testMode();
                 }
                 return snapshot.size === 1;
             })
             .catch((e) => false);
     }
     private _permission: boolean = false;
+    get permission(): boolean {
+        return this._permission;
+    }
 
     private _subscribeUserDB() {
         if (this.customerDB$.getValue().length > 0) return;
@@ -99,7 +104,7 @@ export class ManagerService implements IManagerService {
                 });
             });
 
-        // 신규 DB(ready)는 새로 sub을 걸어야 해.
+        // // 신규 DB(ready)는 새로 sub을 걸어야 해.
         this.store
             .collection(BOOKING_COLLECTION, (ref) =>
                 ref.where('status', '==', 'ready')
@@ -150,16 +155,6 @@ export class ManagerService implements IManagerService {
                     }
                 });
             });
-
-        //TEST MODE
-        // const customerDB: CustomerInfo[] = [];
-        // DB.forEach((db) => {
-        //     customerDB.push({
-        //         ...(db as any),
-        //         date: Moment(db.date),
-        //     });
-        // });
-        // this.customerDB$.next(customerDB);
     }
 
     private _sortList(a: CustomerInfo, b: CustomerInfo) {
@@ -240,5 +235,16 @@ export class ManagerService implements IManagerService {
                     '삭제 과정에서 서버 오류 발생 :' + id + ', ' + e
                 );
             });
+    }
+
+    private _testMode() {
+        const customerDB: CustomerInfo[] = [];
+        DB.forEach((db) => {
+            customerDB.push({
+                ...(db as any),
+                date: Moment(db.date),
+            });
+        });
+        this.customerDB$.next(customerDB);
     }
 }

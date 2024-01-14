@@ -12,6 +12,7 @@ import { SMSService } from '../sms.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BookingService } from 'reservation/service/booking/booking.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ManagerService } from '../manager.service';
 
 @Component({
     selector: 'guest-detail',
@@ -35,22 +36,35 @@ export class GuestDetailComponent {
         dechTable: 0,
         person: 0,
         kids: 0,
-        date: Moment().add('days', 1).hour(12).minutes(0),
+        date: Moment(),
     };
     memo: string = '';
     editMode: boolean;
+    personEditMode: boolean = true;
     flatTableEditMode: boolean;
     foodEditMode: boolean;
+    addMode: boolean;
 
     constructor(
         private dialog: MatBottomSheet,
         private router: Router,
         private mediatorService: MediatorService,
+        private managerService: ManagerService,
         private bookingService: BookingService,
         private SMSService: SMSService,
         private snackBar: MatSnackBar
     ) {
-        this.customerInfo = this.mediatorService.customerInfo;
+        if (!this.managerService.permission) {
+            this.onBackButton();
+        }
+
+        if (this.mediatorService.customerInfo) {
+            this.customerInfo = this.mediatorService.customerInfo;
+        } else {
+            this.editMode = true;
+            this.addMode = true;
+        }
+
         this.memo = this.customerInfo.customerMemo;
         if (!this.customerInfo.deposit) {
             this.customerInfo.deposit = this.recommendDeposit;
@@ -90,7 +104,7 @@ export class GuestDetailComponent {
         if (value) {
             const [year, month, date] = value.split('-');
             this.customerInfo.date.year(Number(year));
-            this.customerInfo.date.month(Number(month));
+            this.customerInfo.date.month(Number(month) - 1);
             this.customerInfo.date.date(Number(date));
         }
     }
@@ -207,6 +221,47 @@ export class GuestDetailComponent {
                     { duration: 2000 }
                 )
             );
+    }
+
+    get canNotSave(): boolean {
+        return !Boolean(this.bookingFlatTable || this.bookingFoods);
+    }
+
+    onSaveButton() {
+        this._fillDefaultCustomerInfo();
+
+        if (this.addMode) {
+            this.managerService
+                .add({
+                    ...this.customerInfo,
+                    status:
+                        this.customerInfo.flatTable ||
+                        this.customerInfo.dechTable
+                            ? 'paymentReady'
+                            : 'confirming',
+                    customerMemo: this.memo || null,
+                })
+                .then((user) => {
+                    this.customerInfo = user;
+                })
+                .catch((e) => {
+                    console.error('신규 예약 등록 실패', e);
+                    this.snackBar.open(
+                        '예약을 실패했습니다. 다시 시도해주세요.',
+                        null,
+                        { duration: 2000 }
+                    );
+                });
+        } else {
+            this.managerService.update(this.customerInfo);
+        }
+    }
+
+    private _fillDefaultCustomerInfo() {
+        if (!this.customerInfo.name) this.customerInfo.name = '미정';
+        if (!this.customerInfo.deposit && this.bookingFlatTable) {
+            this.customerInfo.deposit = this.recommendDeposit;
+        }
     }
 
     onBackButton() {

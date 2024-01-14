@@ -45,7 +45,7 @@ const modules = [
     // MatTabsModule,
     // MatIconModule,
     // MatSelectModule,
-    // MatButtonModule,
+    MatButtonModule,
     // MatSlideToggleModule,
     MatSnackBarModule,
     // MatDatepickerModule,
