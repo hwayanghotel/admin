@@ -104,7 +104,7 @@ export class GuestDetailComponent {
         if (value) {
             const [year, month, date] = value.split('-');
             this.customerInfo.date.year(Number(year));
-            this.customerInfo.date.month(Number(month));
+            this.customerInfo.date.month(Number(month) - 1);
             this.customerInfo.date.date(Number(date));
         }
     }
