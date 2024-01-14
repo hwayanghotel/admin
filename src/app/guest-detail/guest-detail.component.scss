@@ -13,6 +13,15 @@
         display: flex;
         justify-content: space-between;
 
+        .answer-number-box {
+            display: flex;
+
+            input {
+                width: 2rem;
+                text-align: center;
+            }
+        }
+
         p {
             padding: 0.5rem 0;
             text-align: end;
@@ -45,6 +54,11 @@
             font-weight: 700;
         }
     }
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.3;
 }
 
 p {

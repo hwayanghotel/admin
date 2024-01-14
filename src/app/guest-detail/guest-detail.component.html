@@ -41,13 +41,25 @@
         <p>전화번호</p>
         <input type="tel" placeholder="ex) 010-0000-0000" [(ngModel)]="tel">
     </div>
-    <div class="answer-box">
-        <p>인원 (어른)</p>
-        <input type="number" placeholder="4명" [(ngModel)]="customerInfo.person">
+    <div class="answer-box" (click)="personEditMode = !personEditMode">
+        <p>총 인원</p>
+        <p class="answer">{{customerInfo.person+customerInfo.kids}}</p>
     </div>
-    <div class="answer-box">
-        <p>인원 (아이)</p>
-        <input type="number" placeholder="4명" [(ngModel)]="customerInfo.kids">
+    <div class="answer-box" *ngIf="personEditMode">
+        <p>- 어른</p>
+        <div class="answer-number-box">
+            <mat-icon mat-ripple [class.disabled]="customerInfo.person < 1" (click)="customerInfo.person = customerInfo.person-1">keyboard_arrow_left</mat-icon>
+            <input type="number" placeholder="4명" [(ngModel)]="customerInfo.person">
+            <mat-icon mat-ripple (click)="customerInfo.person = customerInfo.person+1">keyboard_arrow_right</mat-icon>
+        </div>
+    </div>
+    <div class="answer-box" *ngIf="personEditMode">
+        <p>- 아이</p>
+        <div class="answer-number-box">
+            <mat-icon mat-ripple [class.disabled]="customerInfo.kids < 1" (click)="customerInfo.kids = customerInfo.kids - 1">keyboard_arrow_left</mat-icon>
+            <input type="number" placeholder="4명" [(ngModel)]="customerInfo.kids">
+            <mat-icon mat-ripple (click)="customerInfo.kids = customerInfo.kids + 1">keyboard_arrow_right</mat-icon>
+        </div>
     </div>
     <div class="answer-box">
         <p>날짜</p>
@@ -63,11 +75,21 @@
     </div>
     <div class="answer-box" *ngIf="flatTableEditMode">
         <p>- 평상</p>
-        <input type="number" placeholder="1대" [(ngModel)]="customerInfo.flatTable">
+        <div class="answer-number-box">
+            <mat-icon mat-ripple [class.disabled]="customerInfo.flatTable < 1"
+                      (click)="customerInfo.flatTable = customerInfo.flatTable - 1">keyboard_arrow_left</mat-icon>
+            <input type="number" placeholder="1대" [(ngModel)]="customerInfo.flatTable">
+            <mat-icon mat-ripple (click)="customerInfo.flatTable = customerInfo.flatTable + 1">keyboard_arrow_right</mat-icon>
+        </div>
     </div>
     <div class="answer-box" *ngIf="flatTableEditMode">
         <p>- 데크</p>
-        <input type="number" placeholder="1대" [(ngModel)]="customerInfo.dechTable">
+        <div class="answer-number-box">
+            <mat-icon mat-ripple [class.disabled]="customerInfo.dechTable < 1"
+                      (click)="customerInfo.dechTable = customerInfo.dechTable - 1">keyboard_arrow_left</mat-icon>
+            <input type="number" placeholder="1대" [(ngModel)]="customerInfo.dechTable">
+            <mat-icon mat-ripple (click)="customerInfo.dechTable = customerInfo.dechTable + 1">keyboard_arrow_right</mat-icon>
+        </div>
     </div>
     <div class="answer-box" *ngIf="bookingFlatTable">
         <p>평상 예약금</p>
@@ -83,19 +105,41 @@
     </div>
     <div class="answer-box" *ngIf="foodEditMode">
         <p>- 능이백숙</p>
-        <input type="number" placeholder="1" [(ngModel)]="customerInfo.neungiBaeksuk">
+        <div class="answer-number-box">
+            <mat-icon mat-ripple [class.disabled]="customerInfo.neungiBaeksuk < 1"
+                      (click)="customerInfo.neungiBaeksuk = customerInfo.neungiBaeksuk - 1">keyboard_arrow_left</mat-icon>
+            <input type="number" placeholder="1" [(ngModel)]="customerInfo.neungiBaeksuk">
+            <mat-icon mat-ripple (click)="customerInfo.neungiBaeksuk = customerInfo.neungiBaeksuk + 1">keyboard_arrow_right</mat-icon>
+        </div>
     </div>
     <div class="answer-box" *ngIf="foodEditMode">
         <p>- 한방백숙</p>
-        <input type="number" placeholder="1" [(ngModel)]="customerInfo.baeksuk">
+
+        <div class="answer-number-box">
+            <mat-icon mat-ripple [class.disabled]="customerInfo.baeksuk < 1"
+                      (click)="customerInfo.baeksuk = customerInfo.baeksuk - 1">keyboard_arrow_left</mat-icon>
+            <input type="number" placeholder="1" [(ngModel)]="customerInfo.baeksuk">
+            <mat-icon mat-ripple (click)="customerInfo.baeksuk = customerInfo.baeksuk + 1">keyboard_arrow_right</mat-icon>
+        </div>
     </div>
     <div class="answer-box" *ngIf="foodEditMode">
         <p>- 버섯찌개</p>
-        <input type="number" placeholder="1" [(ngModel)]="customerInfo.mushroomStew">
+        <div class="answer-number-box">
+            <mat-icon mat-ripple [class.disabled]="customerInfo.mushroomStew < 1"
+                      (click)="customerInfo.mushroomStew = customerInfo.mushroomStew - 1">keyboard_arrow_left</mat-icon>
+            <input type="number" placeholder="1" [(ngModel)]="customerInfo.mushroomStew">
+            <mat-icon mat-ripple (click)="customerInfo.mushroomStew = customerInfo.mushroomStew + 1">keyboard_arrow_right</mat-icon>
+        </div>
     </div>
     <div class="answer-box" *ngIf="foodEditMode">
         <p>- 버섯(2인)</p>
-        <input type="number" placeholder="1" [(ngModel)]="customerInfo.mushroomStewForTwoPeople">
+
+        <div class="answer-number-box">
+            <mat-icon mat-ripple [class.disabled]="customerInfo.mushroomStewForTwoPeople < 1"
+                      (click)="customerInfo.mushroomStewForTwoPeople = customerInfo.mushroomStewForTwoPeople - 1">keyboard_arrow_left</mat-icon>
+            <input type="number" placeholder="1" [(ngModel)]="customerInfo.mushroomStewForTwoPeople">
+            <mat-icon mat-ripple (click)="customerInfo.mushroomStewForTwoPeople = customerInfo.mushroomStewForTwoPeople + 1">keyboard_arrow_right</mat-icon>
+        </div>
     </div>
     <div class="answer-box">
         <p>차량등록</p>
@@ -123,7 +167,7 @@
             <p>전화하기</p>
         </a>
     </div>
-    <div class="bottom-item" matRipple *ngIf="editMode" (click)="onSaveButton()">
+    <div class="bottom-item" matRipple *ngIf="editMode" [class.disabled]="canNotSave" (click)="onSaveButton()">
         <mat-icon>save</mat-icon>
         <p>저장하기</p>
     </div>

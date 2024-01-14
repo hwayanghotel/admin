@@ -57,6 +57,9 @@ export class ManagerService implements IManagerService {
             .catch((e) => false);
     }
     private _permission: boolean = false;
+    get permission(): boolean {
+        return this._permission;
+    }
 
     private _subscribeUserDB() {
         if (this.customerDB$.getValue().length > 0) return;

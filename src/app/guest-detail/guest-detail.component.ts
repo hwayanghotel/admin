@@ -36,10 +36,11 @@ export class GuestDetailComponent {
         dechTable: 0,
         person: 0,
         kids: 0,
-        date: Moment().add('days', 1).hour(12).minutes(0),
+        date: Moment(),
     };
     memo: string = '';
     editMode: boolean;
+    personEditMode: boolean = true;
     flatTableEditMode: boolean;
     foodEditMode: boolean;
     addMode: boolean;
@@ -53,6 +54,10 @@ export class GuestDetailComponent {
         private SMSService: SMSService,
         private snackBar: MatSnackBar
     ) {
+        if (!this.managerService.permission) {
+            this.onBackButton();
+        }
+
         if (this.mediatorService.customerInfo) {
             this.customerInfo = this.mediatorService.customerInfo;
         } else {
@@ -218,7 +223,13 @@ export class GuestDetailComponent {
             );
     }
 
+    get canNotSave(): boolean {
+        return !Boolean(this.bookingFlatTable || this.bookingFoods);
+    }
+
     onSaveButton() {
+        this._fillDefaultCustomerInfo();
+
         if (this.addMode) {
             this.managerService
                 .add({
@@ -243,6 +254,13 @@ export class GuestDetailComponent {
                 });
         } else {
             this.managerService.update(this.customerInfo);
+        }
+    }
+
+    private _fillDefaultCustomerInfo() {
+        if (!this.customerInfo.name) this.customerInfo.name = '미정';
+        if (!this.customerInfo.deposit && this.bookingFlatTable) {
+            this.customerInfo.deposit = this.recommendDeposit;
         }
     }
 
