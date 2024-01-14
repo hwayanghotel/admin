@@ -152,7 +152,7 @@ export class CalendarComponent implements AfterViewInit {
                 }
             } else if (startX - endX < -20) {
                 if (this.calendarExpandLevel === 3) {
-                    this.moveMonthOrWeek(1);
+                    this.moveMonthOrWeek(-1);
                 } else {
                     this.changeDate({
                         date: this.selectedDate.clone().add(-1, 'days'),
