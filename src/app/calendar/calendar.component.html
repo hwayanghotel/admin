@@ -16,7 +16,7 @@
     <div class="month-container">
         <mat-icon matRipple (click)="moveMonthOrWeek(-1)">keyboard_arrow_left</mat-icon>
         <p matRipple>{{selectedDate.format("YYYY년 MM월")}}</p>
-        <mat-icon matRipple (click)="moveMonthOrWeek(1)">keyboard_arrow_right</mat-icon>
+        <mat-icon matRipple (click)="moveMonthOrWeek(1)" [class.disabled]="disabledNextMonth">keyboard_arrow_right</mat-icon>
     </div>
     <div class="weekdays-list">
         <p *ngFor='let day of ["일", "월", "화", "수", "목", "금", "토"]' [class.holiday]="['금','토'].includes(day)">{{day}}</p>

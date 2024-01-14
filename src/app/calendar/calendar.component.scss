@@ -214,6 +214,11 @@ mat-icon {
     opacity: 0.4;
 }
 
+.disabled {
+    pointer-events: none;
+    opacity: 0.3;
+}
+
 .list-container {
     background-color: var(--background-color);
     min-height: 101%;

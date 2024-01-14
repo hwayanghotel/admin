@@ -171,6 +171,10 @@ export class CalendarComponent implements AfterViewInit {
         }
     }
 
+    get disabledNextMonth(): boolean {
+        return this.selectedDate.year() > moment().year();
+    }
+
     get calendar(): ICalendar[][] {
         if (this.calendarExpandLevel > 1) {
             return this._calendar;
