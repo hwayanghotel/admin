@@ -20,6 +20,7 @@ export class CalendarComponent implements AfterViewInit {
     @ViewChild('ListContainer') ListContainer!: ElementRef<HTMLElement>;
     calendarExpandLevel: number = 3; //1,2,3
     today = moment();
+    showSideNav: boolean;
     selectedDate: moment.Moment = moment();
     listType: 'list' | 'timeline' = 'list';
     private _selectedWeek: ICalendar[] = [];

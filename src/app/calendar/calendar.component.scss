@@ -106,8 +106,21 @@
             }
         }
     }
+}
 
+.side-nav {
+    z-index: 10;
+    position: fixed;
+    height: 100%;
+    width: 40vw;
+    background-color: red;
 
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-40vw);
+
+    &.active {
+        transform: translateX(0);
+    }
 }
 
 p {
