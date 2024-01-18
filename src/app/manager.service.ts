@@ -24,9 +24,7 @@ export interface IManagerService {
     providedIn: 'root',
 })
 export class ManagerService implements IManagerService {
-    customerDB$: BehaviorSubject<CustomerInfo[]> = new BehaviorSubject<
-        CustomerInfo[]
-    >([]);
+    customerDB$: BehaviorSubject<CustomerInfo[]> = new BehaviorSubject([]);
 
     constructor(
         private store: AngularFirestore,

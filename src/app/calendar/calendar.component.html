@@ -1,7 +1,7 @@
 <button class="add-button" mat-mini-fab routerLink="/guest-detail"><mat-icon>add</mat-icon></button>
 
 <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/vacation">쉬는 날</button>
+    <button mat-menu-item>할일</button>
 </mat-menu>
 
 <div #Calendar class="fixed" [class.no-height]="calendarExpandLevel < 3">
@@ -30,7 +30,10 @@
         <div class="weekday" *ngFor="let weekday of calendar">
             <div class="date-container" *ngFor="let date of weekday" matRipple (click)="changeDate(date)" [class.dim]="needToDimming(date)">
                 <p class="date" [class.today]="isToday(date)" [class.holiday]="date.isHoliday" [class.selected]="isSelected(date)">{{date.date.format("D")}}</p>
-                <div class="date-short-content" *ngIf="calendarExpandLevel===3">
+                <div class="date-short-content" [class.vacation]="isVacation(date)" *ngIf="calendarExpandLevel===3">
+                    <div *ngIf="isVacation(date)" class="vacation-text">
+                        <p [class.show]="date.date.date() === 1">방학</p>
+                    </div>
                     <div *ngIf="['전체','평상'].includes(type)" class="flat-table">
                         <p>{{shortFlatTable(date)}}</p>
                         <p>{{shortDechTable(date)}}</p>

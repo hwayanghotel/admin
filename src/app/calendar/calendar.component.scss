@@ -266,3 +266,20 @@ mat-icon {
     background-color: rgba(236, 236, 236, 0.3);
     color: black;
 }
+
+.vacation {
+    width: 100%;
+
+    .vacation-text {
+        background-color: rgb(62, 62, 62);
+        color: white;
+
+        p {
+            opacity: 0;
+
+            &.show {
+                opacity: 1;
+            }
+        }
+    }
+}

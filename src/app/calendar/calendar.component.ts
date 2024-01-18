@@ -4,6 +4,7 @@ import { HolidayService } from 'reservation/service/holiday/holiday.service';
 import { ManagerService } from '../manager.service';
 import { Subscription, debounceTime } from 'rxjs';
 import { CustomerInfo } from 'reservation/booking/booking.component.interface';
+import { VacationMonths } from 'reservation/service/booking/booking.service.interface';
 
 interface ICalendar {
     date: moment.Moment;
@@ -334,4 +335,8 @@ export class CalendarComponent implements AfterViewInit {
         return '전체';
     }
     private _type: 'flat-table' | 'food' | 'pension' | 'all' = 'flat-table';
+
+    isVacation(date: ICalendar): boolean {
+        return VacationMonths.includes(date.date.month() + 1);
+    }
 }
