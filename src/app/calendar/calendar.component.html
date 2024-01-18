@@ -62,4 +62,5 @@
         <mat-icon *ngIf="listType==='timeline'" (click)="listType = 'list'">access_time</mat-icon>
     </div>
     <guest-list [class.hide]="listType==='timeline'" [selectedDate]="selectedDate"></guest-list>
+    <booking-timeline [class.hide]="listType==='list'"></booking-timeline>
 </div>

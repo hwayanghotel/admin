@@ -19,7 +19,7 @@ import { SMSService } from './sms.service';
 import { BookingParkingComponent } from 'reservation/booking/booking-parking/booking-parking.component';
 import { MediatorService } from 'reservation/service/mediator/mediator.service';
 import { AdminComponent } from './admin/admin.component';
-import { BookingTimeListComponent } from './booking-time-list/booking-time-list.component';
+import { BookingTimelineComponent } from './booking-timeline/booking-timeline.component';
 
 @NgModule({
     declarations: [
@@ -30,7 +30,7 @@ import { BookingTimeListComponent } from './booking-time-list/booking-time-list.
         CalendarComponent,
         BookingParkingComponent,
         AdminComponent,
-        BookingTimeListComponent,
+        BookingTimelineComponent,
     ],
     imports: [
         BrowserModule,
