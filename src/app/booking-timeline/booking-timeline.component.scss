@@ -1,0 +1,40 @@
+.timeline {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 2rem;
+    border-bottom: 1px solid rgb(154, 154, 154);
+
+    p {
+        margin: 1%;
+        text-align: center;
+    }
+
+    .time {
+        width: 15%;
+    }
+
+    .booking-available {
+        width: 30%;
+    }
+
+    .neungyi {
+        width: 10%;
+    }
+
+    .chicken {
+        width: 10%;
+    }
+
+    .mushroom {
+        width: 12%;
+    }
+
+    .mushroom2 {
+        width: 12%;
+    }
+
+    .hilight {
+        color: rgb(207, 55, 55);
+    }
+}

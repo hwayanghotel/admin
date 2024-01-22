@@ -58,9 +58,10 @@
 <div #ListContainer class="list-container">
     <div class="list-header">
         <p>{{selectedDate.format("YY년 M월 D일")}}</p>
+        <p *ngIf="listType==='timeline'">시간 별 식사 예약 가능 현황</p>
         <mat-icon *ngIf="listType==='list'" (click)="listType = 'timeline'">list</mat-icon>
         <mat-icon *ngIf="listType==='timeline'" (click)="listType = 'list'">access_time</mat-icon>
     </div>
     <guest-list [class.hide]="listType==='timeline'" [selectedDate]="selectedDate"></guest-list>
-    <booking-timeline [class.hide]="listType==='list'"></booking-timeline>
+    <booking-timeline [class.hide]="listType==='list'" [selectedDate]="selectedDate"></booking-timeline>
 </div>

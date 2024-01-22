@@ -1,1 +1,35 @@
-<p>booking-timeline works!</p>
+<!--시간 별 식사 예약 가능 현황 !-->
+<div class="timeline">
+    <p class="time">시간</p>
+    <p class="booking-available">이용좌석(2h)</p>
+    <p class="neungyi">능이</p>
+    <p class="chicken">한방</p>
+    <p class="mushroom">버섯</p>
+    <p class="mushroom2">버섯2</p>
+</div>
+<div class="timeline">
+    <p class="time">총 계</p>
+    <p class="booking-available">-</p>
+    <p class="neungyi">{{data.total.neungyi}}</p>
+    <p class="chicken">{{data.total.chicken}}</p>
+    <p class="mushroom">{{data.total.mushroom}}</p>
+    <p class="mushroom2">{{data.total.mushroom2}}</p>
+</div>
+<div class="timeline">
+    <p class="time">펜/평</p>
+    <p class="booking-available">-</p>
+    <p class="neungyi">{{data.flatTable.neungyi}}</p>
+    <p class="chicken">{{data.flatTable.chicken}}</p>
+    <p class="mushroom">{{data.flatTable.mushroom}}</p>
+    <p class="mushroom2">{{data.flatTable.mushroom2}}</p>
+</div>
+<div *ngFor="let time of timeline" class="timeline">
+    <p class="time">{{time.format("HH:mm")}}</p>
+    <p class="booking-available" [class.hilight]="data[time.format('HH:mm')].table >= MAX_BOOKING.foodTable">
+        {{data[time.format("HH:mm")].table}} / {{MAX_BOOKING.foodTable}}
+    </p>
+    <p class="neungyi">{{data[time.format("HH:mm")].neungyi}}</p>
+    <p class="chicken">{{data[time.format("HH:mm")].chicken}}</p>
+    <p class="mushroom">{{data[time.format("HH:mm")].mushroom}}</p>
+    <p class="mushroom2">{{data[time.format("HH:mm")].mushroom2}}</p>
+</div>
