@@ -10,7 +10,6 @@ import { environment } from 'reservation/environments/environment';
 import { HolidayService } from 'reservation/service/holiday/holiday.service';
 import { ManagerService } from './manager.service';
 import { AppComponent } from './app.component';
-import { FooterComponent } from './footer/footer.component';
 import { GuestListComponent } from './guest-list/guest-list.component';
 import { GuestDetailComponent } from './guest-detail/guest-detail.component';
 import { CalendarV1Component } from './calendar-v1/calendar-v1.component';
@@ -20,17 +19,18 @@ import { SMSService } from './sms.service';
 import { BookingParkingComponent } from 'reservation/booking/booking-parking/booking-parking.component';
 import { MediatorService } from 'reservation/service/mediator/mediator.service';
 import { AdminComponent } from './admin/admin.component';
+import { BookingTimelineComponent } from './booking-timeline/booking-timeline.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         GuestListComponent,
-        FooterComponent,
         GuestDetailComponent,
         CalendarV1Component,
         CalendarComponent,
         BookingParkingComponent,
         AdminComponent,
+        BookingTimelineComponent,
     ],
     imports: [
         BrowserModule,
